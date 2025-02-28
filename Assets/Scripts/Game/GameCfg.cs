@@ -37,6 +37,8 @@ public class GameCfg
     public static float scoreListNumDoubleX = 0.565f;
 
     public static float scoreListNumSingleX = 0.488f;
+
+    public static int wallNum = 15;
 }
 
 public enum GameObjEunm
@@ -49,5 +51,6 @@ public enum GameObjEunm
     effectTextItem,
     effectFlyItem,
     loopListItem,
-    scoreListItem
+    scoreListItem,
+    bombEffct
 }

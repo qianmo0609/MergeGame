@@ -10,6 +10,8 @@ public class PoolManager : Singleton<PoolManager>
     public Pool<EffectFlyItem> EffFlyItemPool;
     public Pool<LoopListItem> LoopListItemPool;
     public Pool<ScoreListItem> ScoreListItemPool;
+    public Pool<Bomb> BombItemPool;
+    public Pool<BombEffctItem> BombEffctPool;
 
     public override void OnInit()
     {
@@ -26,6 +28,8 @@ public class PoolManager : Singleton<PoolManager>
         EffFlyItemPool = new Pool<EffectFlyItem>();
         LoopListItemPool = new Pool<LoopListItem>();
         ScoreListItemPool = new Pool<ScoreListItem>();
+        BombItemPool = new Pool<Bomb>(2);
+        BombEffctPool = new Pool<BombEffctItem>(2);
     }
 
     public void OnDestroy()
@@ -36,5 +40,7 @@ public class PoolManager : Singleton<PoolManager>
         EffFlyItemPool.OnDestroy();
         LoopListItemPool.OnDestroy();
         ScoreListItemPool.OnDestroy();
+        BombItemPool.OnDestroy();
+        BombEffctPool.OnDestroy();
     }
 }

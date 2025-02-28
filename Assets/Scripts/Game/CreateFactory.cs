@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CreateFactory : Singleton<CreateFactory>
@@ -42,9 +43,15 @@ public class CreateFactory : Singleton<CreateFactory>
                     sl= GameObject.Instantiate<ScoreListItem>(ResManager.Instance.scoreListItem);
                 return sl as T;
             case GameObjEunm.bomb:
-                return null;
-            case GameObjEunm.slot:
-                return null;
+                Bomb b = PoolManager.Instance.BombItemPool.getObjFromPool();
+                if (b == null)
+                    b = GameObject.Instantiate(ResManager.Instance.slotPrefab).AddComponent<Bomb>();
+                return b as T;
+            case GameObjEunm.bombEffct:
+                BombEffctItem be = PoolManager.Instance.BombEffctPool.getObjFromPool();
+                if (be == null)
+                    be = GameObject.Instantiate(ResManager.Instance.effectBomb).AddComponent<BombEffctItem>();
+                return be as T;
             default:
                 return null;
         }

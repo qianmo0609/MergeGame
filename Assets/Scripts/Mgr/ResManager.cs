@@ -10,6 +10,7 @@ public class ResManager : Singleton<ResManager>
     public GameObject wall;
     public GameObject buttomWall;
     public Sprite[] gemsSprites;
+    public Sprite bombSprite;
     public GameObject[] effcts;
     public GameObject effectBomb;
     public EffectTextItem effectTextItems;
@@ -29,6 +30,7 @@ public class ResManager : Singleton<ResManager>
         buttomWall = Resources.Load<GameObject>("Res/Prefabs/ButtomWall");
         effectBomb = Resources.Load<GameObject>("Res/Prefabs/Effect/elem_bomb_0");
         scoreListItem = Resources.Load<ScoreListItem>("Res/Prefabs/ScoreItem");
+        bombSprite = Resources.Load<Sprite>("Res/lhdb/lhdb_ui_gems/gem_bomb");
         this.OnLoadSprite();
         this.OnLoadEffct();
     }

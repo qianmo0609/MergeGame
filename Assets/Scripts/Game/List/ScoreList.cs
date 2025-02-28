@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,15 +33,16 @@ public class ScoreList
     public void AddItem(MergeInfo mergeInfo)
     {
         //生成一个飞行物体，飞行完成后，生成一个Gem
-        //EffectFlyItem ef = CreateFactory.Instance.CreateGameObj<EffectFlyItem>(GameObjEunm.effectFlyItem);
-        //ef.OnInitInfo(Utils.GetCurrentPos(mergeInfo.row, mergeInfo.col), currentPos, this.DisplayGem);
+        EffectFlyItem ef = CreateFactory.Instance.CreateGameObj<EffectFlyItem>(GameObjEunm.effectFlyItem);
+        this.MoveItem();
+        ef.OnInitInfo(Utils.GetNextPos(mergeInfo.row, mergeInfo.col),this.ListObj.TransformPoint(this.GetNextItemPos()), ResManager.Instance.gemsSprites[mergeInfo.type], this.GetCb());
     }
 
 #if UNITY_EDITOR
     //测试列表物体显示
     void TestListDisplay()
     {
-        new GameObject().AddComponent<Test>().StartCoroutine(Display());
+        //new GameObject().AddComponent<Test>().StartCoroutine(Display());
     }
 
     IEnumerator Display()
@@ -56,16 +58,17 @@ public class ScoreList
 
     public void DisplayGem()
     {
-        if (scoreListCollection.Count < maxNum)
-        {
-            //增加显示的Item
-            ScoreListItem sl = CreateFactory.Instance.CreateGameObj<ScoreListItem>(GameObjEunm.scoreListItem);
-            sl.transform.parent = ListObj;
-            sl.transform.localPosition = currentPos;
-            scoreListCollection.Add(sl);
-            currentPos += Vector3.up * GameCfg.scoreListItemInterval;
-        }
-        else
+        //增加显示的Item
+        ScoreListItem sl = CreateFactory.Instance.CreateGameObj<ScoreListItem>(GameObjEunm.scoreListItem);
+        sl.transform.parent = ListObj;
+        sl.transform.localPosition = currentPos;
+        scoreListCollection.Add(sl);
+        currentPos += Vector3.up * GameCfg.scoreListItemInterval;
+    }
+
+    void MoveItem()
+    {
+        if (scoreListCollection.Count >= maxNum)
         {
             float y;
             #region 使用Sequence方式
@@ -81,7 +84,7 @@ public class ScoreList
                 y = currentPos.y - GameCfg.scoreListItemInterval * (GameCfg.scoreListItemMaxNum - this.MappintIdx(i) + 1);
                 sequence.Join(scoreListCollection[i].transform.DOLocalMoveY(y, .3f));
             }
-            sequence.Play().OnComplete(this.MoveButtomItem);
+            sequence.Play();//.OnComplete(this.MoveButtomItem);
             #endregion
             //for (int i = 0; i < scoreListCollection.Count; i++)
             //{
@@ -89,6 +92,11 @@ public class ScoreList
             //    scoreListCollection[i].transform.DOLocalMoveY(y, 1.2f);
             //}
         }
+    }
+
+    Action GetCb()
+    {
+         return scoreListCollection.Count < maxNum?this.DisplayGem:MoveButtomItem;
     }
 
     public void MoveButtomItem()
@@ -111,7 +119,12 @@ public class ScoreList
 
     public Vector3 GetCurrentItemPos()
     {
-        return scoreListCollection.Count < maxNum ? currentPos: currentPos - Vector3.up * GameCfg.scoreListItemInterval;
+        return scoreListCollection.Count < maxNum ? currentPos:currentPos - Vector3.up * GameCfg.scoreListItemInterval;
+    }
+
+    public Vector3 GetNextItemPos()
+    {
+        return scoreListCollection.Count < maxNum ? currentPos + new Vector3(-0.2686f, GameCfg.scoreListItemInterval, 0) : currentPos + new Vector3(-0.2686f, 0, 0);
     }
 
     public void ClearCollection()

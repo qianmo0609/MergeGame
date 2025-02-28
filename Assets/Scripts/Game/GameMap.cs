@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using static InvBaseItem;
 
 public class GameMap
 {
@@ -6,11 +8,15 @@ public class GameMap
     GameObject bg = null;
     UIRoot uiRoot = null;
 
+    List<GameObject> walls;
+
     public UIRoot UiRoot { get => uiRoot;}
     public GameObject Bg { get => bg;}
 
     public void OnInitLayout(GameObject grid)
     {
+        this.grid = grid;
+        walls = new List<GameObject>();
         CreateUIRoot(ResManager.Instance.uiRootPrefab);
         CreateBG(ResManager.Instance.slotBGPrefab);
         CreteSlotBG(ResManager.Instance.slotPrefab,grid);
@@ -69,9 +75,25 @@ public class GameMap
         //生成右边的墙
         for (int i = 0; i < 15; i++)
         {
-            GameObject.Instantiate(wall, pos, Quaternion.identity, bg.transform);
+            walls.Add(GameObject.Instantiate(wall, pos, Quaternion.identity, bg.transform));
             pos += new Vector3(0, .28f, 0);
         }
+    }
+
+    public bool DestroyWall()
+    {
+        walls[GameCfg.wallNum-1].SetActive(false);
+        GameCfg.wallNum--;   
+        return GameCfg.wallNum <= 0;
+    }
+
+    /// <summary>
+    /// 得到当前砖块的位置
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetCurrentWallPos()
+    {
+        return this.grid.transform.TransformPoint(walls[GameCfg.wallNum - 1].transform.position);
     }
 
     public void OnDestroy()

@@ -21,6 +21,11 @@ public class EffectItem : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         this.transform.position = new Vector3(10000, 10000, 0);
         this.gameObject.SetActive(false);
-        PoolManager.Instance.EffectItemDic[id].putObjToPool(this);       
+        this.TOPool();
+    }
+
+    protected virtual void TOPool()
+    {
+        PoolManager.Instance.EffectItemDic[id].putObjToPool(this);
     }
 }

@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class GameMgr : MonoBehaviour
 {
@@ -102,8 +103,10 @@ public class GameMgr : MonoBehaviour
     void StartRandomFull()
     {
         //if (GameCfg.isMath) { Debug.Log("检测中，请勿重复点击！"); return; }
-        gemRandomFullCoroutine = StartCoroutine(RandomFull());
+        //gemRandomFullCoroutine = StartCoroutine(RandomFull());
         //this.TestMerge();
+        this.TestFlyItem();
+        this.CreateBomb(Utils.GetCurrentPos(0,2),2);
     }
 
 #if UNITY_EDITOR
@@ -116,6 +119,15 @@ public class GameMgr : MonoBehaviour
         int col = Random.Range(0, 4);
         GemsItem gemItem = gemsItemsCollect[(row - 1) * 4 + col];
         CollectGrid(gemItem);
+    }
+
+    /// <summary>
+    /// 测试飞行物体
+    /// </summary>
+    /// <returns></returns>
+    void TestFlyItem()
+    {
+        this.CreateFlyGemItem(new MergeInfo { row = 0,col = 2,type = 1});
     }
 #endif
 
@@ -355,10 +367,43 @@ public class GameMgr : MonoBehaviour
             //g1.SetPosition();
             xIdx--; 
         }
-        //TODO：需要计算产生新的Gem还是炸弹，如果是产生炸弹，则需要先生成炸弹再生成新的Gem
+        //需要计算产生新的Gem还是炸弹，如果是产生炸弹，则需要先生成炸弹再生成新的Gem
+        Vector3 curPos = Utils.GetCurrentPos(0, y);
+        if (Utils.RandomFloatVale(0.0f, 100.0f) < 100)
+        {
+            //如果小于30，则说明本次生成的是炸弹
+            this.CreateBomb(curPos, y);
+            return;
+        }
+        //如果先生成炸弹了，则新的Gem需要在炸弹执行完后再生成
+        this.ReplenishGems(y,curPos);
+    }
 
+    void CreateBomb(Vector3 curPos, int y)
+    {
+        Bomb b = CreateFactory.Instance.CreateGameObj<Bomb>(GameObjEunm.bomb);
+        b.OnInitInfo(curPos, gameMap.GetCurrentWallPos(), ResManager.Instance.bombSprite, this.BombCb);
+        b.OnSetInfo(y, ReplenishGems);
+    }
+
+    /// <summary>
+    /// 炸弹执行完后的回调函数
+    /// </summary>
+    void BombCb()
+    {
+        if (gameMap.DestroyWall())
+        {
+            //TODO:如果砖块没了，则切换到下一个关卡布局
+        }
+    }
+
+    /// <summary>
+    /// 补充上新的Gem
+    /// </summary>
+    void ReplenishGems(int y,Vector3 curPos)
+    {
         //补充新的GemsItem到顶部位置
-        GemsItem gNew = CreateOneGemItem(Utils.GetCurrentPos(0,y), y<3?DirEnum.left:DirEnum.right, new Vector2Int(0, y));
+        GemsItem gNew = CreateOneGemItem(curPos, y < 3 ? DirEnum.left : DirEnum.right, new Vector2Int(0, y));
         gemsItemsCollect[GameCfg.row * (GameCfg.row - 1) + y] = gNew;
     }
 

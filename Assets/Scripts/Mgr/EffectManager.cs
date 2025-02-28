@@ -14,4 +14,10 @@ public class EffectManager : Singleton<EffectManager>
         EffectItem ei = CreateFactory.Instance.CreateGameObj<EffectItem>(GameObjEunm.effectItem,id);
         ei.OnInitInfo(ei.gameObject, id, position);
     }
+
+    public void CreateEffectbomb(int id,Vector3 position)
+    {
+        BombEffctItem ei = CreateFactory.Instance.CreateGameObj<BombEffctItem>(GameObjEunm.bombEffct);
+        ei.OnInitInfo(ei.gameObject, id, position);
+    }
 }
