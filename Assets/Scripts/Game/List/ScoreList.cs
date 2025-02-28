@@ -31,6 +31,8 @@ public class ScoreList
     }
 
     public void AddItem(MergeInfo mergeInfo)
+
+
     {
         //生成一个飞行物体，飞行完成后，生成一个Gem
         EffectFlyItem ef = CreateFactory.Instance.CreateGameObj<EffectFlyItem>(GameObjEunm.effectFlyItem);

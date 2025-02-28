@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IFlyComponent
 {
-    void Fly();
+    void FlyComplete();
 }

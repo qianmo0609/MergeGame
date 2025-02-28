@@ -105,7 +105,7 @@ public class GameMgr : MonoBehaviour
         //if (GameCfg.isMath) { Debug.Log("检测中，请勿重复点击！"); return; }
         //gemRandomFullCoroutine = StartCoroutine(RandomFull());
         //this.TestMerge();
-        this.TestFlyItem();
+        //this.TestFlyItem();
         this.CreateBomb(Utils.GetCurrentPos(0,2),2);
     }
 
@@ -364,7 +364,6 @@ public class GameMgr : MonoBehaviour
             g1.Idx = new Vector2Int(xIdx, y);
             //将GemItem滑动到下一行
             g1.TweenTOPosition();
-            //g1.SetPosition();
             xIdx--; 
         }
         //需要计算产生新的Gem还是炸弹，如果是产生炸弹，则需要先生成炸弹再生成新的Gem

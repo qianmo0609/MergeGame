@@ -41,4 +41,13 @@ public class Utils
         Vector3 uiPos = uiCamera.ScreenToWorldPoint(screenPos);
         return uiCamera.transform.TransformPoint(uiPos);
     }
+
+    // 计算二次贝塞尔曲线上的点
+    public static Vector3 CalculateQuadraticBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2)
+    {
+        float u = 1 - t;
+        float tt = t * t;
+        float uu = u * u;
+        return uu * p0 + 2 * u * t * p1 + tt * p2;
+    }
 }
