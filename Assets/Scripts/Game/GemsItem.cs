@@ -35,17 +35,17 @@ public class GemsItem : MonoBehaviour
         this.idx = idx;
     }
 
-    public void TweenTOPosition()
+    public Tween TweenTOPosition()
     {
         currentPos = Utils.GetNextPos(this.idx.x,this.idx.y);
-        this.transform.DOMove(currentPos, 0.2f).SetEase(Ease.OutBounce);
+        return this.transform.DOMove(currentPos, 0.2f).SetEase(Ease.OutBounce);
     }
 
     public void PlayMergeEffect()
     {
-        this.RecycleSelf();
+        this.transform.position = new Vector3(10000, 10000, 0);
         //播放爆炸特效动画
-        EffectManager.Instance.CreateEffectItem(UnityEngine.Random.Range(1,6), currentPos);
+        EffectManager.Instance.CreateEffectItem(this.type+1, currentPos);
     }
 
     /// <summary>
@@ -55,7 +55,6 @@ public class GemsItem : MonoBehaviour
     public void RecycleSelf()
     {
         this.transform.parent = null;
-        this.transform.position = new Vector3(10000, 10000, 0);
         this.idx = Vector2Int.down;
         PoolManager.Instance.gemsPool.putObjToPool(this);
     }

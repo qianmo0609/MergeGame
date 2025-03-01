@@ -5,6 +5,7 @@ Shader "Custom/CustomSprite"
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
         _Rect("Rect",Vector) = (-20,20,-20,20)
+        _alphaCoeff("alphaCoeff",Range(0,1)) = 1
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
         [HideInInspector] _RendererColor ("RendererColor", Color) = (1,1,1,1)
         [HideInInspector] _Flip ("Flip", Vector) = (1,1,1,1)
@@ -44,6 +45,7 @@ Shader "Custom/CustomSprite"
             fixed2 _Flip;
             fixed4 _RendererColor;
             float4 _Rect;
+            float _alphaCoeff;
 
             struct appdata_t
             {
@@ -105,8 +107,7 @@ Shader "Custom/CustomSprite"
             fixed4 SpriteFrag(v2f IN) : SV_Target
             {
                 fixed4 col = SampleSpriteTexture (IN.texcoord) * IN.color;
-                col.a *= step(_Rect.x,IN.posWs.x) * step(IN.posWs.x,_Rect.y);
-                col.a *= step(_Rect.z,IN.posWs.y) * step(IN.posWs.y,_Rect.w);
+                col.a *= step(_Rect.x,IN.posWs.x) * step(IN.posWs.x,_Rect.y) * step(_Rect.z,IN.posWs.y) * step(IN.posWs.y,_Rect.w) * _alphaCoeff;
                 col.rgb *= col.a;
                 return col;
             }

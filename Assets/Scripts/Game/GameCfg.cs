@@ -18,13 +18,14 @@ public class GameCfg
 
     public static Vector3[] startPoss = new Vector3[] { new Vector3(-1f, 0.03f, 0), new Vector3(-1f, 0.03f, 0), new Vector3(-1f, 0.03f, 0) };
 
-    public static bool isMath = false; //是否正在匹配
+    public static GameState gameState = GameState.idle; //是否正在匹配
 
     public static Vector3 buttomWallStartPos = new Vector3(-1.85f,-2.378f,0);
+    public static int buttomWallNum = 16;
 
     public static Vector3[] wall = new Vector3[] { new Vector3(-1.669f,-2.057f,0), new Vector3(1.709f, -2.057f,0) };
 
-    public static float uiYInterval = 5f;
+    public static float uiYInterval = 75f;
 
     public static float[] uiYStartPos = new float[] { 0, 0, 0 };
 
@@ -32,13 +33,27 @@ public class GameCfg
 
     public static int scoreListItemMaxNum = 6;
 
-    public static Vector3[] scoreListStartPoss = new Vector3[] { new Vector3(0,-0.154f,0), new Vector3(0, 0, 0) , new Vector3(0, 0, 0) };
+    public static Vector3[] scoreListStartPoss = new Vector3[] { new Vector3(0, -0.154f,0), new Vector3(0, 0, 0) , new Vector3(0, 0, 0) };
 
     public static float scoreListNumDoubleX = 0.565f;
 
     public static float scoreListNumSingleX = 0.488f;
 
     public static int wallNum = 15;
+
+    public static float flyTOPosOffsetX = -0.2686f;
+
+    public static float flyBezierOffsetY = 3f;
+
+    public static Vector4 spriteClipRange = new Vector4(-5,-3,-1.8f,1.15f);
+    public static Vector4 spriteRange = new Vector4(-10,10,-10,10);
+}
+
+public enum GameState
+{
+    idle,
+    isMatching,
+    gameOver,
 }
 
 public enum GameObjEunm

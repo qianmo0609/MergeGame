@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static InvBaseItem;
 
 public class GameMap
 {
@@ -34,13 +33,12 @@ public class GameMap
         bg = GameObject.Instantiate(slotBGPrefab);
     }
 
-    //暂时做4*4棋盘
     void CreteSlotBG(GameObject slotPrefab, GameObject grid)
     {
         Vector3 startPos = new Vector3(-1f, 0.03f, 0);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < GameCfg.row; i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < GameCfg.col; j++)
             {
                 GameObject slot = GameObject.Instantiate(slotPrefab);
                 slot.transform.SetParent(grid.transform);
@@ -54,7 +52,7 @@ public class GameMap
     {
         Vector3 pos = GameCfg.buttomWallStartPos;
         //从左到右依次生成底部的墙
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < GameCfg.buttomWallNum; i++)
         {
             GameObject.Instantiate(buttomWall,pos,Quaternion.identity,bg.transform);
             pos += new Vector3(.25f, 0, 0);

@@ -12,6 +12,7 @@ public class GameStart : MonoBehaviour
         ResManager.Instance.OnInit();
         LocalData.Instance.OnInit();
         CreateFactory.Instance.OnInit();
+        UIManager.Instance.OnInit();
         Instantiate(gameManager);
     }
 
@@ -21,5 +22,6 @@ public class GameStart : MonoBehaviour
         LocalData.Instance.OnDisable();
         PoolManager.Instance.OnDestroy();
         EventCenter.Instance.Disable();
+        UIManager.Instance.OnDestroy();
     }
 }

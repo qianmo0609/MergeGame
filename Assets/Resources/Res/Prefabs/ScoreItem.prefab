@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 8152983570333715543}
+  symbol: {fileID: 6325511748500147940}
   scoreShi: {fileID: 5453519455563148781}
   scoreGe: {fileID: 2705209604275430885}
 --- !u!1 &3278096396691971624

@@ -44,6 +44,7 @@ public class GameUI : MonoBehaviour
             GameCfg.isHandUp = true;
             btnStart.normalSprite = "h5by_xyx_qxgj";
             btnHandUp.normalSprite = "h5by_xyx_gjz";
+            EventCenter.Instance.ExcuteEvent(EventNum.TestEvent);
         }
         //挂机状态下，有取消挂机控制
     }

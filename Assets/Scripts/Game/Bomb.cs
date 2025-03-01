@@ -6,28 +6,19 @@ using UnityEngine;
 /// </summary>
 public class Bomb : EffectFlyItem
 {
-    Action cb;
-    Action<int, Vector3> ReplenishGemsEvent;
-    int y;
+    Action<MergeInfo> cb;
     Vector3 tarPos;
-    public override void OnInitInfo(Vector3 pos, Vector3 tartPos, Sprite sprite, Action cb)
+    public override void OnInitInfo(MergeInfo mergeInfo, Vector3 tartPos, Sprite sprite, Action<MergeInfo> cb, bool isMoveAtOnce = false)
     {
         this.cb = cb;
         this.tarPos = tartPos;
-        base.OnInitInfo(pos, tartPos, sprite, this.CallBack);
+        base.OnInitInfo(mergeInfo, tartPos, sprite, this.CallBack, isMoveAtOnce);
     }
 
-    public void OnSetInfo(int y , Action<int,Vector3> aciton)
-    {
-        this.y = y;
-        this.ReplenishGemsEvent = aciton;
-    }
-
-    public void CallBack()
+    public void CallBack(MergeInfo mergeInfo)
     {
         //生成爆炸特效
         EffectManager.Instance.CreateEffectbomb(-1,this.tarPos);
-        this.ReplenishGemsEvent?.Invoke(this.y, Utils.GetCurrentPos(0, y));
-        cb();
+        cb(mergeInfo);
     }
 }

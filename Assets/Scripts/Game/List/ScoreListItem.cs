@@ -5,13 +5,34 @@ using UnityEngine;
 public class ScoreListItem : MonoBehaviour
 {
     [SerializeField] SpriteRenderer icon;
-    //[SerializeField] SpriteRenderer symbol;
+    [SerializeField] SpriteRenderer symbol;
     [SerializeField] SpriteRenderer scoreShi;
     [SerializeField] SpriteRenderer scoreGe;
 
-    public void OnSetInfo(Sprite icon,int num)
+    // 存储材质属性块
+    private MaterialPropertyBlock materialPropertyBlock1;
+    private MaterialPropertyBlock materialPropertyBlock2;
+    private MaterialPropertyBlock materialPropertyBlock3;
+    private MaterialPropertyBlock materialPropertyBlock4;
+
+    float alphaV = 1;
+
+    Coroutine fadeCoroutine = null;
+
+    private void OnEnable()
+    {
+        materialPropertyBlock1 = new MaterialPropertyBlock();
+        materialPropertyBlock2 = new MaterialPropertyBlock();
+        materialPropertyBlock3 = new MaterialPropertyBlock();
+        materialPropertyBlock4 = new MaterialPropertyBlock();
+        this.OnHide(true);
+    }
+
+    public void OnSetInfo(Sprite icon, int num)
     {
         this.icon.sprite = icon;
+        alphaV = 0;
+        this.OnSetRenderInfo();
         Vector3 pos = scoreGe.transform.localPosition;
         int shiValue = num / 10;
         if (shiValue > 0)
@@ -19,20 +40,81 @@ public class ScoreListItem : MonoBehaviour
             //如果是两位数
             scoreShi.gameObject.SetActive(true);
             pos.x = GameCfg.scoreListNumDoubleX;
-            //TODO：设置数字
+            //设置十位数字
+            scoreShi.sprite = ResManager.Instance.comboSprites[shiValue - 1];
         }
         else
         {
             //如果是一位数
             scoreShi.gameObject.SetActive(false);
             pos.x = GameCfg.scoreListNumSingleX;
-            //TODO：设置数字
         }
         scoreGe.transform.localPosition = pos;
+        //设置个位数字
+        scoreGe.sprite = ResManager.Instance.comboSprites[num % 10];
+        
+        fadeCoroutine = StartCoroutine(this.OnFade());
     }
 
-    public void OnHide()
+    IEnumerator OnFade()
     {
+        while (alphaV <= 1)
+        {
+            alphaV += 0.1f;
+            yield return new WaitForSeconds(0.1f);
+            this.OnSetRenderInfo();
+        }
+        if(fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+            fadeCoroutine = null;
+        }
+    }
 
+    void OnSetRenderInfo()
+    {
+        this.OnSetMatInfo(materialPropertyBlock1, icon, alphaV);
+        this.OnSetMatInfo(materialPropertyBlock2, symbol, alphaV);
+        this.OnSetMatInfo(materialPropertyBlock3, scoreGe, alphaV);
+        this.OnSetMatInfo(materialPropertyBlock4, scoreShi, alphaV);
+    }
+
+    void OnSetMatInfo(MaterialPropertyBlock materialPropertyBlock,SpriteRenderer rendererComponent,float value)
+    {
+        rendererComponent.GetPropertyBlock(materialPropertyBlock);
+        // 设置 _alphaCoeff 属性的值
+        materialPropertyBlock.SetFloat("_alphaCoeff", value);
+        // 将修改后的属性块应用到渲染器上
+        rendererComponent.SetPropertyBlock(materialPropertyBlock);
+    }
+
+    public void SetItemState(bool isActive, Vector4 Range)
+    {
+        this.OnHide(isActive);
+        this.OnSetRenderClipRange(Range);
+    }
+
+    public void OnHide(bool isActive)
+    {
+        this.symbol.gameObject.SetActive(isActive);
+        this.scoreShi.gameObject.SetActive(isActive);
+        this.scoreGe.gameObject.SetActive(isActive);
+    }
+
+    void OnSetRenderClipRange(Vector4 Range)
+    {
+        this.OnSetMatClipRange(materialPropertyBlock1, icon, Range);
+        this.OnSetMatClipRange(materialPropertyBlock2, symbol, Range);
+        this.OnSetMatClipRange(materialPropertyBlock3, scoreGe, Range);
+        this.OnSetMatClipRange(materialPropertyBlock4, scoreShi, Range);
+    }
+
+    void OnSetMatClipRange(MaterialPropertyBlock materialPropertyBlock, SpriteRenderer rendererComponent, Vector4 Range)
+    {
+        rendererComponent.GetPropertyBlock(materialPropertyBlock);
+        // 设置 _alphaCoeff 属性的值
+        materialPropertyBlock.SetVector("_Rect", Range);
+        // 将修改后的属性块应用到渲染器上
+        rendererComponent.SetPropertyBlock(materialPropertyBlock);
     }
 }

@@ -10,11 +10,14 @@ public class ResManager : Singleton<ResManager>
     public GameObject wall;
     public GameObject buttomWall;
     public Sprite[] gemsSprites;
+    public Sprite[] comboSprites;
     public Sprite bombSprite;
     public GameObject[] effcts;
     public GameObject effectBomb;
     public EffectTextItem effectTextItems;
     public ScoreListItem scoreListItem;
+    public Material customSpriteMat;
+    public Dictionary<string, UIBase> uiWinsPrefab;
     public override void OnInit()
     {
         base.OnInit();
@@ -31,8 +34,12 @@ public class ResManager : Singleton<ResManager>
         effectBomb = Resources.Load<GameObject>("Res/Prefabs/Effect/elem_bomb_0");
         scoreListItem = Resources.Load<ScoreListItem>("Res/Prefabs/ScoreItem");
         bombSprite = Resources.Load<Sprite>("Res/lhdb/lhdb_ui_gems/gem_bomb");
+        customSpriteMat = Resources.Load<Material>("Res/Mat/CustomSpriteClip");
         this.OnLoadSprite();
         this.OnLoadEffct();
+        this.OnLoadComboSprites();
+
+        this.OnLoadUIWindows();
     }
 
     void OnLoadSprite()
@@ -51,6 +58,21 @@ public class ResManager : Singleton<ResManager>
         {
            effcts[i-1] = Resources.Load<GameObject>($"Res/Prefabs/Effect/elem_eli_{i}_0");
         }
+    }
+
+    void OnLoadComboSprites()
+    {
+        comboSprites = new Sprite[10];
+        for (int i = 0; i < 10; i++)
+        {
+            comboSprites[i] = Resources.Load<Sprite>($"Res/lhdb/lhdb_font_combo/{i}");
+        }
+    }
+
+    void OnLoadUIWindows()
+    {
+        uiWinsPrefab = new Dictionary<string, UIBase>();
+
     }
 
     public void OnDestroy()
