@@ -94,6 +94,14 @@ public class GameMap
         return this.grid.transform.TransformPoint(walls[GameCfg.wallNum - 1].transform.position);
     }
 
+    /// <summary>
+    /// 重新布局地图
+    /// </summary>
+    public void OnRecreate()
+    {
+        //TODO:
+    }
+
     public void OnDestroy()
     {
         grid = null;

@@ -72,7 +72,8 @@ public class ResManager : Singleton<ResManager>
     void OnLoadUIWindows()
     {
         uiWinsPrefab = new Dictionary<string, UIBase>();
-
+        uiWinsPrefab.Add(typeof(RecordUI).Name, Resources.Load<RecordUI>("Res/Prefabs/RecordWin"));
+        uiWinsPrefab.Add(typeof(RuleUI).Name, Resources.Load<RuleUI>("Res/Prefabs/RuleWin"));
     }
 
     public void OnDestroy()

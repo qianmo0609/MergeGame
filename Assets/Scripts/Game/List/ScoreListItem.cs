@@ -25,7 +25,6 @@ public class ScoreListItem : MonoBehaviour
         materialPropertyBlock2 = new MaterialPropertyBlock();
         materialPropertyBlock3 = new MaterialPropertyBlock();
         materialPropertyBlock4 = new MaterialPropertyBlock();
-        this.OnHide(true);
     }
 
     public void OnSetInfo(Sprite icon, int num)
@@ -116,5 +115,17 @@ public class ScoreListItem : MonoBehaviour
         materialPropertyBlock.SetVector("_Rect", Range);
         // 将修改后的属性块应用到渲染器上
         rendererComponent.SetPropertyBlock(materialPropertyBlock);
+    }
+
+    /// <summary>
+    /// 将自己回收
+    /// </summary>
+    public void OnRecycleSelf()
+    {
+        this.transform.parent = null;
+        this.transform.position = new Vector3(10000, 10000, 0);
+        this.OnHide(true);
+        this.OnSetRenderClipRange(GameCfg.spriteClipRange);
+        PoolManager.Instance.ScoreListItemPool.putObjToPool(this);
     }
 }

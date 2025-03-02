@@ -109,7 +109,7 @@ public class GameMgr : MonoBehaviour
         gemRandomFullCoroutine = StartCoroutine(RandomFull());
         //this.TestMerge();
         //this.TestFlyItem();
-        //this.CreateBomb(Utils.GetCurrentPos(0,2),2);
+        //this.CreateBomb(Utils.GetCurrentPos(0,2),0,2);
     }
 
 #if UNITY_EDITOR
@@ -144,7 +144,7 @@ public class GameMgr : MonoBehaviour
     }
 #endif
 
-    IEnumerator RandomFull()
+    IEnumerator RandomFull(bool isReCreateFGems = true)
     {
         for (int i = 0; i < gemsItemsCollect.Count; i++)
         {
@@ -153,7 +153,7 @@ public class GameMgr : MonoBehaviour
             g.transform.DOMove(tarPos, 0.2f).SetEase(Ease.OutSine).OnComplete(() =>
             {
                 //宝石下落
-                g.transform.DOMoveY(-10, Utils.RandomFloatVale(0.1f,0.3f)).SetEase(Ease.InExpo).OnComplete(()=> { RecycleObj(g); });
+                g.transform.DOMoveY(-10, Utils.RandomFloatVale(0.1f, 0.3f)).SetEase(Ease.InExpo).OnComplete(() => { RecycleObj(g); });
             });
             yield return new WaitForSeconds(0.02f);
         }
@@ -161,7 +161,8 @@ public class GameMgr : MonoBehaviour
         gemsItemsCollect.Clear();
         //下落完成后再生成宝石
         yield return new WaitForSeconds(0.8f);
-        StartCreateGems();
+        if (isReCreateFGems) { StartCreateGems(); }
+        
         if (gemRandomFullCoroutine != null)
         {
             StopCoroutine(gemRandomFullCoroutine);
@@ -285,8 +286,17 @@ public class GameMgr : MonoBehaviour
         }
         #endregion
 
-        #region 滑动窗口法
-
+        #region 滑动窗口算法
+        /*
+         * 如果是3个可以消除，那么以滑动窗口的大小为5*5的，第二次检测就可以跳过前三个元素，
+         * 直接跳到第四个元素开始检查,因为这三个没必要检测了
+          |$$$$$|$$$$              $$$|$$$$$|$
+          |$$$$$|$$$$     --->     $$$|$$$$$|$  
+          |$$$$$|$$$$              $$$|$$$$$|$
+          |$$$$$|$$$$              $$$|$$$$$|$
+          |$$$$$|$$$$              $$$|$$$$$|$
+           $$$$$$$$$               $$$$$$$$$
+         */
         #endregion
         return isMatch;
     }
@@ -400,7 +410,7 @@ public class GameMgr : MonoBehaviour
     {
         //gemsItemsCollect[(GameCfg.row - x - 1) * GameCfg.row + y];
         Bomb b = CreateFactory.Instance.CreateGameObj<Bomb>(GameObjEunm.bomb);
-        b.OnInitInfo(new MergeInfo { row = x,col = y}, gameMap.GetCurrentWallPos(), ResManager.Instance.bombSprite, this.BombCb);
+        b.OnInitInfo(new MergeInfo { row = x,col = y}, gameMap.GetCurrentWallPos(), ResManager.Instance.bombSprite, this.BombCb,true);
         bombCollection.Push(b);
     }
 
@@ -413,11 +423,17 @@ public class GameMgr : MonoBehaviour
         {
             //首先需要将游戏状态改为游戏结束状态
             GameCfg.gameState = GameState.gameOver;
-            //TODO:如果砖块没了，则切换到下一个关卡布局
+            GameCfg.level++;
+            GameCfg.level %= 3;
+            //如果砖块没了，则切换到下一个关卡布局
+            scoreList.OnRestInfo();
+            gemRandomFullCoroutine = StartCoroutine(RandomFull(false));
+            //重新布局地图
+            gameMap.OnRecreate();
         }
         else
         {
-            this.MergeGemAndMove(mergeInfo.row,mergeInfo.col);
+            //this.MergeGemAndMove(mergeInfo.row,mergeInfo.col);
         }
     }
 

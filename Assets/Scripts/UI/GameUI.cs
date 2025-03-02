@@ -51,12 +51,12 @@ public class GameUI : MonoBehaviour
 
     private void OnRecordEvent()
     {
-
+        UIManager.Instance.GetWindow<RecordUI>().Show();
     }
 
     private void OnInfoEvent()
     {
-
+        UIManager.Instance.GetWindow<RuleUI>().Show();
     }
 
     private void OnDestroy()

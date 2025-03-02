@@ -131,9 +131,9 @@ public class ScoreList
         return currentPos + new Vector3(GameCfg.flyTOPosOffsetX, GameCfg.scoreListItemInterval, 0);
     }  
 
-    public void ClearCollection()
+    void ClearCollection()
     {
-        for (int i = 0; i < scoreListCollection.Count; i++)
+        for (int i = scoreListCollection.Count - 1; i >=0 ; i--)
         {
             ScoreListItem sl = scoreListCollection[i];
             sl.SetItemState(false,GameCfg.spriteRange);
@@ -141,8 +141,15 @@ public class ScoreList
             sl.transform.DOMove(tarPos, 0.3f).SetEase(Ease.OutSine).OnComplete(() =>
             {
                 //±¦Ê¯ÏÂÂä
-                sl.transform.DOMoveY(-10, Utils.RandomFloatVale(0.1f, 0.8f)).SetEase(Ease.InExpo);
+                sl.transform.DOMoveY(-10, Utils.RandomFloatVale(0.1f, 0.8f)).SetEase(Ease.InExpo).OnComplete(() => { sl.OnRecycleSelf(); });
             });
         }
+        scoreListCollection.Clear();
+    }
+
+    public void OnRestInfo()
+    {
+        this.ClearCollection();
+        this.OnReset();
     }
 }

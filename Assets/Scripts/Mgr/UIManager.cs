@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +12,9 @@ public class UIManager : Singleton<UIManager>
         uiCollection = new Dictionary<string, UIBase>();    
     }
 
-    public T GetWindow<T>(string key) where T : UIBase
+    public T GetWindow<T>() where T : UIBase
     {
+        string key = typeof(T).Name;
         UIBase win;
         if (uiCollection.TryGetValue(key,out win))
         {
@@ -23,7 +25,9 @@ public class UIManager : Singleton<UIManager>
 
             if (ResManager.Instance.uiWinsPrefab.TryGetValue(key,out win))
             {
-                return GameObject.Instantiate(win) as T;
+                UIBase ui = GameObject.Instantiate(win);
+                uiCollection[key] = ui;
+                return ui as T;
             }
             else
             {

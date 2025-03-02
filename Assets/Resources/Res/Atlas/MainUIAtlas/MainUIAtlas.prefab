@@ -47,8 +47,8 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 0d7d7690916730d479f125aaf87af715, type: 2}
   mSprites:
   - name: gem_brick01_01
-    x: 926
-    y: 735
+    x: 553
+    y: 8
     width: 63
     height: 31
     borderLeft: 0
@@ -60,8 +60,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: gem_btn_help
-    x: 848
-    y: 956
+    x: 535
+    y: 329
     width: 68
     height: 68
     borderLeft: 0
@@ -73,8 +73,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: gem_btn_music
-    x: 948
-    y: 956
+    x: 565
+    y: 207
     width: 69
     height: 68
     borderLeft: 0
@@ -86,8 +86,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_ckjl
-    x: 540
-    y: 350
+    x: 524
+    y: 276
     width: 109
     height: 47
     borderLeft: 0
@@ -99,8 +99,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_deg
-    x: 848
-    y: 737
+    x: 475
+    y: 2
     width: 77
     height: 29
     borderLeft: 0
@@ -112,8 +112,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_djjl
-    x: 540
-    y: 330
+    x: 565
+    y: 187
     width: 81
     height: 19
     borderLeft: 0
@@ -124,9 +124,35 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  - name: h5by_xyx_djjl_db
+    x: 670
+    y: 536
+    width: 369
+    height: 488
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: h5by_xyx_djjl_gb
+    x: 604
+    y: 335
+    width: 56
+    height: 62
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: h5by_xyx_dsg
-    x: 907
-    y: 767
+    x: 397
+    y: 2
     width: 77
     height: 29
     borderLeft: 0
@@ -138,8 +164,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_dyg
-    x: 907
-    y: 797
+    x: 319
+    y: 2
     width: 77
     height: 29
     borderLeft: 0
@@ -151,8 +177,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_fh
-    x: 848
-    y: 888
+    x: 566
+    y: 40
     width: 66
     height: 67
     borderLeft: 0
@@ -164,8 +190,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_fkdb
-    x: 948
-    y: 827
+    x: 633
+    y: 47
     width: 68
     height: 60
     borderLeft: 0
@@ -177,8 +203,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_gj
-    x: 848
-    y: 686
+    x: 760
+    y: 159
     width: 49
     height: 24
     borderLeft: 0
@@ -190,8 +216,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_gjz
-    x: 848
-    y: 711
+    x: 617
+    y: 14
     width: 73
     height: 25
     borderLeft: 0
@@ -204,7 +230,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: h5by_xyx_gs
     x: 670
-    y: 673
+    y: 184
     width: 177
     height: 351
     borderLeft: 0
@@ -216,8 +242,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_hsks
-    x: 0
-    y: 322
+    x: 319
+    y: 108
     width: 179
     height: 75
     borderLeft: 0
@@ -229,8 +255,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_jbdb-
-    x: 922
-    y: 689
+    x: 278
+    y: 208
     width: 39
     height: 45
     borderLeft: 0
@@ -242,8 +268,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_jh
-    x: 898
-    y: 685
+    x: 635
+    y: 215
     width: 23
     height: 25
     borderLeft: 0
@@ -255,8 +281,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_jt
-    x: 915
-    y: 890
+    x: 635
+    y: 269
     width: 28
     height: 28
     borderLeft: 0
@@ -268,8 +294,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_ks
-    x: 360
-    y: 322
+    x: 499
+    y: 108
     width: 179
     height: 75
     borderLeft: 0
@@ -281,8 +307,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_lj
-    x: 848
-    y: 840
+    x: 679
+    y: 136
     width: 80
     height: 47
     borderLeft: 0
@@ -293,9 +319,35 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  - name: h5by_xyx_prompt_qd
+    x: 278
+    y: 254
+    width: 245
+    height: 69
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 1
+    paddingBottom: 0
+  - name: h5by_xyx_prompt_qx
+    x: 319
+    y: 184
+    width: 245
+    height: 69
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 1
+    paddingBottom: 0
   - name: h5by_xyx_qxgj
-    x: 180
-    y: 322
+    x: 319
+    y: 32
     width: 179
     height: 75
     borderLeft: 0
@@ -307,8 +359,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_sbdb
-    x: 915
-    y: 919
+    x: 634
+    y: 298
     width: 26
     height: 36
     borderLeft: 0
@@ -320,8 +372,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_sz
-    x: 948
-    y: 888
+    x: 499
+    y: 40
     width: 66
     height: 67
     borderLeft: 0
@@ -332,9 +384,22 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  - name: h5by_xyx_ts
+    x: 278
+    y: 324
+    width: 256
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: h5by_xyx_wh-
-    x: 848
-    y: 782
+    x: 702
+    y: 78
     width: 58
     height: 57
     borderLeft: 0
@@ -346,8 +411,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_xbs
-    x: 917
-    y: 997
+    x: 635
+    y: 241
     width: 28
     height: 27
     borderLeft: 0
@@ -372,8 +437,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_zzjmyb
-    x: 670
-    y: 471
+    x: 0
+    y: 196
     width: 277
     height: 201
     borderLeft: 0
@@ -385,8 +450,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: h5by_xyx_zzjmzb
-    x: 670
-    y: 298
+    x: 0
+    y: 23
     width: 318
     height: 172
     borderLeft: 0

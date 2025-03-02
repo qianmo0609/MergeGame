@@ -3,95 +3,125 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class LoopList:UIBase
+public class LoopList:MonoBehaviour
 {
     public UIScrollView scrollView;
     public UIGrid grid;
-    public GameObject listItemPrefab;
-    public int itemCount = 20;
+    public GameObject itemPrefab;
+    public int itemCount;
+    public float itemHeight;
 
-    private List<GameObject> listItems = new List<GameObject>();
+    private List<GameObject> visibleItems = new List<GameObject>();
+    private List<int> dataList = new List<int>();
     private int visibleItemCount;
-    private float itemSize;
+    private float lastScrollPosition;
 
     void Start()
     {
-        // 初始化列表项
-        InitializeList();
-        // 计算可见列表项数量和列表项大小
-        CalculateVisibleItems();
+        // 初始化数据列表
+        for (int i = 0; i < itemCount; i++)
+        {
+            dataList.Add(i);
+        }
+
+        // 计算可见区域内可容纳的最大列表项数量
+        visibleItemCount = Mathf.FloorToInt(scrollView.panel.height / itemHeight);
+
+        // 初始化显示的列表项
+        InitializeVisibleItems();
+
         // 监听滚动事件
         scrollView.onDragFinished = OnScrollFinished;
     }
 
-    void InitializeList()
+    void InitializeVisibleItems()
     {
-        for (int i = 0; i < itemCount; i++)
+        for (int i = 0; i < visibleItemCount; i++)
         {
-            GameObject item = Instantiate(listItemPrefab) as GameObject;
-            item.transform.parent = grid.transform;
-            item.transform.localScale = Vector3.one;
-            listItems.Add(item);
-            // 设置列表项的内容，这里简单设置文本
-            UILabel label = item.GetComponentInChildren<UILabel>();
-            if (label != null)
-            {
-                label.text = "Item " + i;
-            }
+            GameObject item = NGUITools.AddChild(grid.gameObject, itemPrefab);
+            UpdateItem(item, i);
+            visibleItems.Add(item);
         }
         grid.Reposition();
     }
 
-    void CalculateVisibleItems()
+    void UpdateItem(GameObject item, int index)
     {
-        // 计算列表项的大小
-        itemSize = grid.cellHeight;
-        // 计算可见列表项的数量
-        visibleItemCount = Mathf.FloorToInt(scrollView.panel.height / itemSize);
+        if (index < dataList.Count)
+        {
+            UILabel label = item.GetComponentInChildren<UILabel>();
+            if (label != null)
+            {
+                label.text = "Item " + dataList[index].ToString();
+            }
+        }
     }
 
     void OnScrollFinished()
     {
-        // 获取滚动视图的位置
-        Vector3 scrollPosition = scrollView.transform.localPosition;
-        // 判断滚动方向并处理循环逻辑
-        if (scrollPosition.y > 0)
+        float currentScrollPosition = grid.transform.localPosition.y;
+        if (currentScrollPosition > lastScrollPosition)
         {
             // 向上滚动
-            while (scrollPosition.y > itemSize)
+            while (currentScrollPosition > itemHeight)
             {
                 MoveLastItemToTop();
-                scrollPosition.y -= itemSize;
-                scrollView.transform.localPosition = scrollPosition;
+                currentScrollPosition -= itemHeight;
+                grid.transform.localPosition = new Vector3(grid.transform.localPosition.x, currentScrollPosition, grid.transform.localPosition.z);
             }
         }
-        else if (scrollPosition.y < 0)
+        else if (currentScrollPosition < lastScrollPosition)
         {
             // 向下滚动
-            while (scrollPosition.y < -itemSize)
+            while (currentScrollPosition < -itemHeight)
             {
                 MoveFirstItemToBottom();
-                scrollPosition.y += itemSize;
-                scrollView.transform.localPosition = scrollPosition;
+                currentScrollPosition += itemHeight;
+                grid.transform.localPosition = new Vector3(grid.transform.localPosition.x, currentScrollPosition, grid.transform.localPosition.z);
             }
         }
+        lastScrollPosition = currentScrollPosition;
     }
 
     void MoveLastItemToTop()
     {
-        GameObject lastItem = listItems[listItems.Count - 1];
-        listItems.RemoveAt(listItems.Count - 1);
-        listItems.Insert(0, lastItem);
+        GameObject lastItem = visibleItems[visibleItems.Count - 1];
+        visibleItems.RemoveAt(visibleItems.Count - 1);
+        visibleItems.Insert(0, lastItem);
+        int newIndex = GetFirstVisibleIndex() - 1;
+        if (newIndex < 0)
+        {
+            newIndex = dataList.Count - 1;
+        }
         lastItem.transform.SetAsFirstSibling();
+        UpdateItem(lastItem, newIndex);
         grid.Reposition();
     }
 
     void MoveFirstItemToBottom()
     {
-        GameObject firstItem = listItems[0];
-        listItems.RemoveAt(0);
-        listItems.Add(firstItem);
+        GameObject firstItem = visibleItems[0];
+        visibleItems.RemoveAt(0);
+        visibleItems.Add(firstItem);
+        int newIndex = GetLastVisibleIndex() + 1;
+        if (newIndex >= dataList.Count)
+        {
+            newIndex = 0;
+        }
         firstItem.transform.SetAsLastSibling();
+        UpdateItem(firstItem, newIndex);
         grid.Reposition();
+    }
+
+    int GetFirstVisibleIndex()
+    {
+        float offset = scrollView.transform.localPosition.y / itemHeight;
+        int index = Mathf.FloorToInt(offset);
+        return index;
+    }
+
+    int GetLastVisibleIndex()
+    {
+        return GetFirstVisibleIndex() + visibleItemCount - 1;
     }
 }
