@@ -11,7 +11,7 @@ public class EffectFlyItem : MonoBehaviour,IFlyComponent
     bool isCanMove = false;
 
     // 物体移动的总时间
-    public float duration = .3f;
+    public float duration = .5f;
     // 记录开始移动的时间
     private float startTime;
 
@@ -70,7 +70,7 @@ public class EffectFlyItem : MonoBehaviour,IFlyComponent
         this.RecycleSelf();
     }
 
-    public void RecycleSelf()
+    public virtual void RecycleSelf()
     {
         this.transform.position = new Vector3(10000, 10000, 0);
         PoolManager.Instance.EffFlyItemPool.putObjToPool(this);

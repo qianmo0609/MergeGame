@@ -12,6 +12,8 @@ public class PoolManager : Singleton<PoolManager>
     public Pool<ScoreListItem> ScoreListItemPool;
     public Pool<Bomb> BombItemPool;
     public Pool<BombEffctItem> BombEffctPool;
+    public Pool<GameObject> SlotPool;
+    public Pool<GameObject> BottomWall;
 
     public override void OnInit()
     {
@@ -30,6 +32,8 @@ public class PoolManager : Singleton<PoolManager>
         ScoreListItemPool = new Pool<ScoreListItem>();
         BombItemPool = new Pool<Bomb>(2);
         BombEffctPool = new Pool<BombEffctItem>(2);
+        SlotPool = new Pool<GameObject>(36);
+        BottomWall = new Pool<GameObject>(20);
     }
 
     public void OnDestroy()
@@ -42,5 +46,7 @@ public class PoolManager : Singleton<PoolManager>
         ScoreListItemPool.OnDestroy();
         BombItemPool.OnDestroy();
         BombEffctPool.OnDestroy();
+        SlotPool.OnDestroy();
+        BottomWall.OnDestroy();
     }
 }

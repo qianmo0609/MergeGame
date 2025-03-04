@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 
 /// <summary>
@@ -8,6 +9,7 @@ public class Bomb : EffectFlyItem
 {
     Action<MergeInfo> cb;
     Vector3 tarPos;
+
     public override void OnInitInfo(MergeInfo mergeInfo, Vector3 tartPos, Sprite sprite, Action<MergeInfo> cb, bool isMoveAtOnce = false)
     {
         this.cb = cb;
@@ -20,5 +22,11 @@ public class Bomb : EffectFlyItem
         //生成爆炸特效
         EffectManager.Instance.CreateEffectbomb(-1,this.tarPos);
         cb(mergeInfo);
+    }
+
+    public override void RecycleSelf()
+    {
+        this.transform.position = new Vector3(10000, 10000, 0);
+        PoolManager.Instance.BombItemPool.putObjToPool(this);
     }
 }

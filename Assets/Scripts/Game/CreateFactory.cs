@@ -52,6 +52,20 @@ public class CreateFactory : Singleton<CreateFactory>
                 if (be == null)
                     be = GameObject.Instantiate(ResManager.Instance.effectBomb).AddComponent<BombEffctItem>();
                 return be as T;
+            case GameObjEunm.slot:
+                GameObject slot = PoolManager.Instance.SlotPool.getObjFromPool();
+                if(slot == null)
+                {
+                    slot = GameObject.Instantiate(ResManager.Instance.slotPrefab);
+                }
+                return slot as T;
+            case GameObjEunm.bottomWall:
+                GameObject bw = PoolManager.Instance.BottomWall.getObjFromPool();
+                if (bw == null)
+                {
+                    bw = GameObject.Instantiate(ResManager.Instance.buttomWall);
+                }
+                return bw as T;
             default:
                 return null;
         }

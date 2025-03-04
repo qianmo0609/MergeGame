@@ -20,10 +20,10 @@ public class GameCfg
 
     public static GameState gameState = GameState.idle; //ÊÇ·ñÕýÔÚÆ¥Åä
 
-    public static Vector3 buttomWallStartPos = new Vector3(-1.85f,-2.378f,0);
-    public static int buttomWallNum = 16;
+    public static Vector3[] buttomWallStartPos = new Vector3[3] { new Vector3(-1.85f, -2.378f, 0), new Vector3(-1.85f, -2.378f, 0), new Vector3(-1.85f, -2.378f, 0) };
+    public static int[] buttomWallNum = new int[3] { 16, 18, 20 };
 
-    public static Vector3[] wall = new Vector3[] { new Vector3(-1.669f,-2.057f,0), new Vector3(1.709f, -2.057f,0) };
+    public static Vector3[,] wall = new Vector3[,] { { new Vector3(-1.669f, -2.057f, 0), new Vector3(1.709f, -2.057f, 0) }, { new Vector3(-1.669f, -2.057f, 0), new Vector3(2.36f, -2.057f, 0) }, { new Vector3(2.36f, -2.057f, 0), new Vector3(-2.33f, -2.057f, 0) } };
 
     public static float uiYInterval = 75f;
 
@@ -67,5 +67,6 @@ public enum GameObjEunm
     effectFlyItem,
     loopListItem,
     scoreListItem,
-    bombEffct
+    bombEffct,
+    bottomWall
 }

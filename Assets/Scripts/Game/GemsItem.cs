@@ -16,15 +16,17 @@ public class GemsItem : MonoBehaviour
     DirEnum dirEnum;
     [SerializeField]
     Vector2Int idx; //用于保存物体在什么位置 x表示的是行，y表示的是列
+    bool isBomb;
 
     public int GemType { get => gemType; }
     public DirEnum _DirEnum { get => dirEnum; }
     public Vector2Int Idx { get => idx; set => idx = value; }
     public int Type { get => type;}
+    public bool IsBomb { get => isBomb;}
 
     Vector3 currentPos;
 
-    public void OnInitInfo(Sprite gemIcon,int type,DirEnum dirEnum,Vector2Int idx)
+    public void OnInitInfo(Sprite gemIcon, int type, DirEnum dirEnum, Vector2Int idx, bool isBomb = false)
     {
         this.spriteRenderer = this.GetComponent<SpriteRenderer>();
         this.spriteRenderer.sprite = gemIcon;
@@ -33,6 +35,7 @@ public class GemsItem : MonoBehaviour
         this.type = type;
         this.dirEnum = dirEnum;
         this.idx = idx;
+        this.isBomb = isBomb;
     }
 
     public Tween TweenTOPosition()
@@ -54,8 +57,19 @@ public class GemsItem : MonoBehaviour
     /// <param name="p"></param>
     public void RecycleSelf()
     {
+        if (this.isBomb)
+        {
+            this.BombRecycleSelf();
+        }
         this.transform.parent = null;
         this.idx = Vector2Int.down;
         PoolManager.Instance.gemsPool.putObjToPool(this);
+    }
+
+    public void BombRecycleSelf()
+    {
+        this.isBomb = false;
+        this.transform.position = new Vector3(10000, 10000, 0);
+        this.gameObject.SetActive(true);
     }
 }
