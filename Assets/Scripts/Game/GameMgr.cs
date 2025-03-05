@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 
 public class GameMgr : MonoBehaviour
 {
@@ -24,9 +25,20 @@ public class GameMgr : MonoBehaviour
 
     private bool[,] visited;// 检测标记数组
 
+    #region yiled return 定义
+    WaitForSeconds ws01;
+    WaitForSeconds ws02;
+    WaitForSeconds ws03;
+    WaitForSeconds ws05;
+    WaitForSeconds ws08;
+    WaitForSeconds ws10;
+    WaitForSeconds ws20;
+    #endregion
+
     void Awake()
     {
         this.CreateGrid();
+        this.CreateWS();
         gameMap = new GameMap();
         gemsItemsCollect = new List<GemsItem>();
         mergeItemCollect = new Stack<GemsItem>();
@@ -37,6 +49,17 @@ public class GameMgr : MonoBehaviour
         scoreList = new ScoreList(gameMap.Bg.transform.Find("ListObj"));
         StartCreateGems();
         EventCenter.Instance.RegisterEvent(EventNum.TestEvent, StartRandomFull);
+    }
+
+    void CreateWS()
+    {
+        ws01 = new WaitForSeconds(.1f);
+        ws02 = new WaitForSeconds(.2f);
+        ws03 = new WaitForSeconds(.3f);
+        ws05 = new WaitForSeconds(.5f);
+        ws08 = new WaitForSeconds(.8f);
+        ws10 = new WaitForSeconds(1f);
+        ws20 = new WaitForSeconds(2f);
     }
 
     void CreateGrid()
@@ -66,16 +89,17 @@ public class GameMgr : MonoBehaviour
            3$$$$
            行和列从左上角开始计算第一行第一列
          */
+        GemsItem gemItem = null;
         for (int j = GameCfg.row - 1; j >= 0; j--)
         {
             for (int i = 0; i < GameCfg.col; i++)
-            { 
-                GemsItem gemItem = CreateOneGemItem(Utils.GetCurrentPos(j,i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i)); 
+            {
+                gemItem = CreateOneGemItem(Utils.GetCurrentPos(j,i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i)); 
                 gemsItemsCollect.Add(gemItem);
-                yield return new WaitForSeconds(0.1f);
+                yield return ws01;
             }
         }
-        yield return new WaitForSeconds(0.2f);
+        yield return ws02;
         //生成完宝石开始检测
         DetectMergeGems();
 
@@ -108,7 +132,7 @@ public class GameMgr : MonoBehaviour
     /// </summary>
     void StartRandomFull()
     {
-        if (GameCfg.gameState != GameState.idle) { Debug.Log("检测中，请勿重复点击！"); return; }
+        if (GameCfg.gameState != GameState.idle) { Debug.Log(ConstValue.tips); return; }
         gemRandomFullCoroutine = StartCoroutine(RandomFull());
         //如果不是在挂机状态下，每次点击都需要禁用掉开始按钮
         GameCfg.isEnableBtnStart = false;
@@ -148,9 +172,10 @@ public class GameMgr : MonoBehaviour
 #endif
     IEnumerator RandomFull(bool isReCreateFGems = true)
     {
+        GemsItem g;
         for (int i = 0; i < gemsItemsCollect.Count; i++)
         {
-            GemsItem g = gemsItemsCollect[i];
+            g = gemsItemsCollect[i];
             g.IsFull = true;
         }
         //清空分数显示
@@ -160,7 +185,7 @@ public class GameMgr : MonoBehaviour
         //重置每轮炸弹数
         this.bombNumEatchRound = 1;
         //下落完成后再生成宝石
-        yield return new WaitForSeconds(0.8f);
+        yield return ws08;
         if (isReCreateFGems) { StartCreateGems(); }
         
         if (gemRandomFullCoroutine != null)
@@ -297,10 +322,12 @@ public class GameMgr : MonoBehaviour
         new Vector2Int(0,1) //右
     };
 
+    List<GemsItem> matches = new List<GemsItem>();
+    Queue<GemsItem> queue = new Queue<GemsItem>();
     List<GemsItem> FindMatches(GemsItem startGem)
     {
-        List<GemsItem> matches = new List<GemsItem>();
-        Queue<GemsItem> queue = new Queue<GemsItem>();
+        matches.Clear();
+        queue.Clear();
         int targetType = startGem.GemType;
 
         // 初始化队列
@@ -403,7 +430,7 @@ public class GameMgr : MonoBehaviour
         {
             EffectManager.Instance.CreateEffectTextItem(item.score, Utils.GetNGUIPos(item.row), gameMap.UiRoot.transform);
             this.CreateFlyGemItem(item);
-            yield return new WaitForSeconds(.1f);
+            yield return ws01;
         }
         //先清除棋盘上的gem和播放特效
         //foreach (var item in mergeItemCollect)
@@ -414,7 +441,7 @@ public class GameMgr : MonoBehaviour
         {
             item.PlayMergeEffect();
         }
-        yield return new WaitForSeconds(.5f);
+        yield return ws05;
         //再整理棋盘
         //while (mergeItemCollect.Count > 0)
         //{
@@ -436,11 +463,11 @@ public class GameMgr : MonoBehaviour
         {
             GemsItem g = bombCollecion.Pop();
             Vector2Int idx = g.Idx;
-            yield return new WaitForSeconds(.3f);
+            yield return ws03;
             g.gameObject.SetActive(false);
             this.CreateBomb(Utils.GetCurrentPos(idx.x, idx.y), idx.x, idx.y);
         }
-        yield return new WaitForSeconds(.8f);
+        yield return ws08;
 
         if (gemMergeCoroutione != null)
         {
@@ -527,10 +554,10 @@ public class GameMgr : MonoBehaviour
         //如果砖块没了，则切换到下一个关卡布局
         scoreList.OnRestInfo();
         gemRandomFullCoroutine = StartCoroutine(RandomFull(false));
-        yield return new WaitForSeconds(1f);
+        yield return ws10;
         //重新布局地图
         gameMap.OnRecreate();
-        yield return new WaitForSeconds(2f);
+        yield return ws20;
         this.StartCreateGems();
         if(restartCoroutione != null)
         {

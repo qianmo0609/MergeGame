@@ -71,7 +71,7 @@ public class GameUI : MonoBehaviour
     private void UpdateTotalScore()
     {
         totalScore.Clear();
-        totalScore.Append("x");
+        totalScore.Append(ConstValue.symbolX);
         totalScore.Append(GameCfg.totalScore.ToString());
         this.txtTotalScore.text = totalScore.ToString();
     }

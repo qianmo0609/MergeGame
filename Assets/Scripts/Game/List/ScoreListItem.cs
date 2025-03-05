@@ -104,7 +104,7 @@ public class ScoreListItem : MonoBehaviour
     {
         rendererComponent.GetPropertyBlock(materialPropertyBlock);
         // 设置 _alphaCoeff 属性的值
-        materialPropertyBlock.SetFloat("_alphaCoeff", value);
+        materialPropertyBlock.SetFloat(ConstValue.alphaCoeff, value);
         // 将修改后的属性块应用到渲染器上
         rendererComponent.SetPropertyBlock(materialPropertyBlock);
     }
@@ -134,7 +134,7 @@ public class ScoreListItem : MonoBehaviour
     {
         rendererComponent.GetPropertyBlock(materialPropertyBlock);
         // 设置 _alphaCoeff 属性的值
-        materialPropertyBlock.SetVector("_Rect", Range);
+        materialPropertyBlock.SetVector(ConstValue.Rect, Range);
         // 将修改后的属性块应用到渲染器上
         rendererComponent.SetPropertyBlock(materialPropertyBlock);
     }

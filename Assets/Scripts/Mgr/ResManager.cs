@@ -86,5 +86,6 @@ public class ResManager : Singleton<ResManager>
     }
     public void OnDestroy()
     {
+        Resources.UnloadUnusedAssets();
     }
 }

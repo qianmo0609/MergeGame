@@ -69,6 +69,12 @@ public static class ConstValue
     public static string btnHandUpNormalSpriteName = "h5by_xyx_gj"; //挂机按钮在正常时显示的精灵名
     public static string btnHandUpHandUpSpriteName = "h5by_xyx_gjz"; //挂机按钮在挂机时显示的精灵名   
 
+    public static string symbolX = "x";
+
+    public static string tips = "检测中，请勿重复点击！"; //点击提示信息
+
+    public static string alphaCoeff = "_alphaCoeff";
+    public static string Rect = "_Rect";
 
 }
 
