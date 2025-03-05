@@ -551,6 +551,7 @@ public class GameMgr : MonoBehaviour
         Vector2Int ly = GameCfg.gameLayout[GameCfg.level - 1];
         GameCfg.row = ly.x;
         GameCfg.col = ly.y;
+        visited = new bool[GameCfg.row, GameCfg.col];
         //如果砖块没了，则切换到下一个关卡布局
         scoreList.OnRestInfo();
         gemRandomFullCoroutine = StartCoroutine(RandomFull(false));

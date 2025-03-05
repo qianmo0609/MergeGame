@@ -98,7 +98,7 @@ Shader "Custom/CustomSprite"
 
             #if ETC1_EXTERNAL_ALPHA
                 fixed4 alpha = tex2D (_AlphaTex, uv);
-                color.a = lerp (color.a, alpha.r, _EnableExternalAlpha);
+                //color.a = lerp (color.a, alpha.r, _EnableExternalAlpha);
             #endif
 
                 return color;
