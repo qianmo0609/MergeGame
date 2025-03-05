@@ -10,6 +10,15 @@ public class Bomb : EffectFlyItem
     Action<MergeInfo> cb;
     Vector3 tarPos;
 
+    public override void Update()
+    {
+        base.Update();
+        if (this.IsCanMove)
+        {
+            this.transform.Rotate(Vector3.forward * 360 * Time.fixedDeltaTime,Space.World);
+        }
+    }
+
     public override void OnInitInfo(MergeInfo mergeInfo, Vector3 tartPos, Sprite sprite, Action<MergeInfo> cb, bool isMoveAtOnce = false)
     {
         this.cb = cb;

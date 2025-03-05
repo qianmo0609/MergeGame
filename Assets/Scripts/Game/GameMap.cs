@@ -14,6 +14,9 @@ public class GameMap
 
     List<GameObject> slots;
 
+    SpriteRenderer levelSprite;
+    int currentWallNum = 0;
+
     public UIRoot UiRoot { get => uiRoot; }
     public GameObject Bg { get => bg; }
 
@@ -29,6 +32,7 @@ public class GameMap
         CreteSlotBG(grid);
         CreateWall(ResManager.Instance.wall);
         CreateButtomWall();
+        currentWallNum = GameCfg.wallNum;
     }
 
     void CreateUIRoot(UIRoot uiRootPrefab)
@@ -39,6 +43,7 @@ public class GameMap
     void CreateBG(GameObject slotBGPrefab)
     {
         bg = GameObject.Instantiate(slotBGPrefab);
+        this.levelSprite = bg.transform.Find("Level").GetComponent<SpriteRenderer>();
     }
 
     void CreteSlotBG(GameObject grid)
@@ -94,9 +99,9 @@ public class GameMap
 
     public bool DestroyWall()
     {
-        walls[GameCfg.wallNum - 1].SetActive(false);
-        GameCfg.wallNum--;
-        return GameCfg.wallNum <= 0;
+        walls[currentWallNum - 1].SetActive(false);
+        currentWallNum--;
+        return currentWallNum <= 0;
     }
 
     /// <summary>
@@ -105,7 +110,7 @@ public class GameMap
     /// <returns></returns>
     public Vector3 GetCurrentWallPos()
     {
-        return this.grid.transform.TransformPoint(walls[GameCfg.wallNum - 1].transform.position);
+        return this.grid.transform.TransformPoint(walls[currentWallNum - 1].transform.position);
     }
 
     /// <summary>
@@ -123,6 +128,9 @@ public class GameMap
         //GameCfg.row = ly.x;
         //GameCfg.col = ly.y;
 #endif
+        this.levelSprite.sprite = ResManager.Instance.levelSprite[GameCfg.level - 1];
+        //重置当前砖块
+        currentWallNum = GameCfg.wallNum;
         //1.底部的墙块要重新设置
         this.OnResetBottomWall();
         //2.两边墙需要重新设置

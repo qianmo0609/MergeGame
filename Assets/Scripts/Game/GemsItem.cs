@@ -7,7 +7,6 @@ public enum DirEnum
     left,
     right
 }
-
 public class GemsItem : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;
@@ -17,14 +16,30 @@ public class GemsItem : MonoBehaviour
     [SerializeField]
     Vector2Int idx; //用于保存物体在什么位置 x表示的是行，y表示的是列
     bool isBomb;
+    Tween mTween;
 
     public int GemType { get => gemType; }
     public DirEnum _DirEnum { get => dirEnum; }
     public Vector2Int Idx { get => idx; set => idx = value; }
     public int Type { get => type;}
     public bool IsBomb { get => isBomb;}
+    public bool IsFull { 
+        get { return isFull; } 
+        set { 
+            isFull = value;
+            vh = Utils.RandomFloatVale(-2,2);
+            a = 30;
+            vv = Utils.RandomFloatVale(5,8);
+        } 
+    }
 
     Vector3 currentPos;
+
+    bool isFull = false;
+    float vv = 3;
+    float vh = 0;
+
+    float a = 0;
 
     public void OnInitInfo(Sprite gemIcon, int type, DirEnum dirEnum, Vector2Int idx, bool isBomb = false)
     {
@@ -38,10 +53,26 @@ public class GemsItem : MonoBehaviour
         this.isBomb = isBomb;
     }
 
+    public void Update()
+    {
+        if (this.isFull)
+        {
+            vv -= a * Time.deltaTime;
+            this.transform.position += new Vector3(vh, vv, 0) * Time.deltaTime;
+
+            if(this.transform.position.y < -10)
+            {
+                this.isFull = false;
+                this.RecycleSelf();
+            }
+        }   
+    }
+
     public Tween TweenTOPosition()
     {
         currentPos = Utils.GetNextPos(this.idx.x,this.idx.y);
-        return this.transform.DOMove(currentPos, 0.2f).SetEase(Ease.OutBounce);
+        mTween = this.transform.DOMove(currentPos, 0.2f).SetEase(Ease.OutBounce);
+        return mTween;
     }
 
     public void PlayMergeEffect()
@@ -63,7 +94,9 @@ public class GemsItem : MonoBehaviour
         }
         this.transform.parent = null;
         this.idx = Vector2Int.down;
+        mTween.Kill();
         PoolManager.Instance.gemsPool.putObjToPool(this);
+        this.isFull = false;
     }
 
     public void BombRecycleSelf()

@@ -16,20 +16,7 @@ public class LocalData : Singleton<LocalData>
 
     public override void OnInit()
     {
-        //scoreDatas = new List<ScoreData>();
-        scoreDatas = new List<ScoreData>
-        {
-            new ScoreData{type = 0 , num = 3},
-            new ScoreData{type = 3 , num = 1},
-            new ScoreData{type = 5, num = 2},
-            new ScoreData{type = 2 , num = 1},
-            new ScoreData{type = 1 , num = 5},
-            new ScoreData{type = 8 , num = 3},
-            new ScoreData{type = 8 , num = 1},
-            new ScoreData{type = 8 , num = 2},
-            new ScoreData{type = 8 , num = 3},
-            new ScoreData{type = 8 , num = 4},
-        };
+        scoreDatas = new List<ScoreData>();
         base.OnInit();
     }
 

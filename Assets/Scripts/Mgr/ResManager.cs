@@ -18,6 +18,7 @@ public class ResManager : Singleton<ResManager>
     public ScoreListItem scoreListItem;
     public Material customSpriteMat;
     public Dictionary<string, UIBase> uiWinsPrefab;
+    public Sprite[] levelSprite;
     public override void OnInit()
     {
         base.OnInit();
@@ -38,7 +39,7 @@ public class ResManager : Singleton<ResManager>
         this.OnLoadSprite();
         this.OnLoadEffct();
         this.OnLoadComboSprites();
-
+        this.OnLoadLevelSprite();
         this.OnLoadUIWindows();
     }
 
@@ -76,6 +77,13 @@ public class ResManager : Singleton<ResManager>
         uiWinsPrefab.Add(typeof(RuleUI).Name, Resources.Load<RuleUI>("Res/Prefabs/RuleWin"));
     }
 
+    void OnLoadLevelSprite()
+    {
+        levelSprite = new Sprite[3];
+        levelSprite[0] = Resources.Load<Sprite>("Res/lhdb/lhdb_ui_main/h5by_xyx_dyg");
+        levelSprite[1] = Resources.Load<Sprite>("Res/lhdb/lhdb_ui_main/h5by_xyx_deg");
+        levelSprite[2] = Resources.Load<Sprite>("Res/lhdb/lhdb_ui_main/h5by_xyx_dsg");
+    }
     public void OnDestroy()
     {
     }

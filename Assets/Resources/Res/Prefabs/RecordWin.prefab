@@ -288,7 +288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrangement: 1
   sorting: 0
-  pivot: 1
+  pivot: 4
   maxPerLine: 0
   cellWidth: 500
   cellHeight: 62

@@ -22,6 +22,8 @@ public class GameMgr : MonoBehaviour
     int bombNumEatchRound = 1;
     Stack<GemsItem> bombCollecion;
 
+    private bool[,] visited;// 检测标记数组
+
     void Awake()
     {
         this.CreateGrid();
@@ -30,6 +32,7 @@ public class GameMgr : MonoBehaviour
         mergeItemCollect = new Stack<GemsItem>();
         gemMergeInfos = new Dictionary<int, MergeInfo>();
         bombCollecion = new Stack<GemsItem>(1);
+        visited = new bool[GameCfg.row, GameCfg.col];
         gameMap.OnInitLayout(grid);
         scoreList = new ScoreList(gameMap.Bg.transform.Find("ListObj"));
         StartCreateGems();
@@ -145,12 +148,12 @@ public class GameMgr : MonoBehaviour
         {
             GemsItem g = gemsItemsCollect[i];
             Vector3 tarPos = g.transform.position + this.getDirOffset(g);
-            g.transform.DOMove(tarPos, 0.2f).SetEase(Ease.OutSine).OnComplete(() =>
-            {
-                //宝石下落
-                g.transform.DOMoveY(-10, Utils.RandomFloatVale(0.1f, 0.3f)).SetEase(Ease.InExpo).OnComplete(() => { RecycleObj(g); });
-            });
-            yield return new WaitForSeconds(0.02f);
+            g.IsFull = true;
+            //g.transform.DOMove(tarPos, 0.2f).SetEase(Ease.OutCirc).OnComplete(() =>
+            //{
+            //    //宝石下落
+            //    g.transform.DOMoveY(-10, Utils.RandomFloatVale(0.1f, 0.3f)).SetEase(Ease.InExpo).SetDelay(.1f).OnComplete(() => { RecycleObj(g); });
+            //});
         }
         //清空分数显示
         scoreList.OnRestInfo();
@@ -177,14 +180,16 @@ public class GameMgr : MonoBehaviour
 
     Vector3 getDirOffset(GemsItem g)
     {
-        if (g._DirEnum == DirEnum.left)
-        {
-            return new Vector3(Utils.RandomFloatVale(-1.0f, 0f), Utils.RandomFloatVale(0, 1.0f), 0);
-        }
-        else
-        {
-            return new Vector3(Utils.RandomFloatVale(0f, 1.0f), Utils.RandomFloatVale(0, 1.0f), 0);
-        }
+        //if (g._DirEnum == DirEnum.left)
+        //{
+        //    return new Vector3(Utils.RandomFloatVale(0f, 1.0f), Utils.RandomFloatVale(0, 1.0f), 0);
+        //}
+        //else
+        //{
+        //    return new Vector3(Utils.RandomFloatVale(-1.0f, 0f), Utils.RandomFloatVale(0, 1.0f), 0);  
+        //}
+
+        return new Vector3(Utils.RandomFloatVale(-.5f, .5f), Utils.RandomFloatVale(0, 1.0f), 0);
     }
 
     /// <summary>
@@ -292,6 +297,117 @@ public class GameMgr : MonoBehaviour
          */
         #endregion
         return isMatch;
+    }
+
+    List<Vector2Int> FindMatches(Vector2Int startPos)
+    {
+        List<Vector2Int> matches = new List<Vector2Int>();
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        int targetType = gemsItemsCollect[GameCfg.row * startPos.x + startPos.y].Type;
+
+        // 初始化队列
+        queue.Enqueue(startPos);
+        visited[startPos.x, startPos.y] = true;
+
+        // 四方向向量：上、下、左、右
+        Vector2Int[] directions = {
+        Vector2Int.up,
+        Vector2Int.down,
+        Vector2Int.left,
+        Vector2Int.right
+    };
+
+        while (queue.Count > 0)
+        {
+            Vector2Int current = queue.Dequeue();
+            matches.Add(current);
+
+            foreach (Vector2Int dir in directions)
+            {
+                Vector2Int next = current + dir;
+
+                // 边界检查
+                if (next.x < 0 || next.x >= GameCfg.row) continue;
+                if (next.y < 0 || next.y >= GameCfg.col) continue;
+
+                // 类型检查 && 访问标记
+                if (!visited[next.x, next.y] &&
+                    gemsItemsCollect[GameCfg.row * next.x + next.y].Type == targetType)
+                {
+                    visited[next.x, next.y] = true;
+                    queue.Enqueue(next);
+                }
+            }
+        }
+        return matches.Count >= 4 ? matches : null;
+    }
+
+    public void CheckAllMatches()
+    {
+        // 重置访问标记
+        System.Array.Clear(visited, 0, visited.Length);
+
+        HashSet<Vector2Int> allMatches = new HashSet<Vector2Int>();
+
+        // 遍历整个网格
+        for (int x = 0; x < GameCfg.row; x++)
+        {
+            for (int y = 0; y < GameCfg.col; y++)
+            {
+                if (!visited[x, y])
+                {
+                    var matches = FindMatches(new Vector2Int(x, y));
+                    if (matches != null)
+                    {
+                        foreach (var pos in matches)
+                        {
+                            allMatches.Add(pos);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 执行消除
+        if (allMatches.Count > 0)
+        {
+            //ClearMatches(allMatches);
+            //StartCoroutine(RefillGrid());
+        }
+    }
+
+    // T型检测（横向3个 + 纵向2个）
+    bool CheckTShape(Vector2Int center)
+    {
+        // 横向检测
+        int horizontalCount = CountConsecutive(center, Vector2Int.right)
+                            + CountConsecutive(center, Vector2Int.left) + 1;
+
+        // 纵向检测
+        int verticalCount = CountConsecutive(center, Vector2Int.up)
+                          + CountConsecutive(center, Vector2Int.down) + 1;
+
+        return (horizontalCount >= 3 && verticalCount >= 2)
+            || (horizontalCount >= 2 && verticalCount >= 3);
+    }
+
+    int CountConsecutive(Vector2Int start, Vector2Int direction)
+    {
+        int count = 0;
+        Vector2Int current = start + direction;
+
+        while (IsInGrid(current) && gemsItemsCollect[GameCfg.row * current.x+current.y].Type == gemsItemsCollect[GameCfg.row * start.x + start.y].Type)
+        {
+            count++;
+            current += direction;
+        }
+
+        return count;
+    }
+
+    bool IsInGrid(Vector2Int current)
+    {
+        return (current.x >= 0 || current.x < GameCfg.row) && (current.y >= 0 || current.y < GameCfg.col);
     }
 
     void AddMergeInfo(int gemType, int score, int type, int row, int col,int num)
@@ -421,7 +537,11 @@ public class GameMgr : MonoBehaviour
     }
 
     IEnumerator OnRestartGame()
-    {   //首先需要将游戏状态改为游戏结束状态
+    {
+        //检测如果游戏不在空闲状态需要等待
+        //等待上边整理完
+        yield return new WaitForSeconds(.5f);
+        //首先需要将游戏状态改为游戏结束状态
         GameCfg.gameState = GameState.gameOver;
         GameCfg.level++;
         if (GameCfg.level == 4)
@@ -434,9 +554,10 @@ public class GameMgr : MonoBehaviour
         //如果砖块没了，则切换到下一个关卡布局
         scoreList.OnRestInfo();
         gemRandomFullCoroutine = StartCoroutine(RandomFull(false));
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         //重新布局地图
         gameMap.OnRecreate();
+        yield return new WaitForSeconds(2f);
         this.StartCreateGems();
         if(restartCoroutione != null)
         {
@@ -451,7 +572,7 @@ public class GameMgr : MonoBehaviour
     bool CalacBombPercentage()
     {
         //需要计算产生新的Gem还是炸弹，如果是产生炸弹，则需要先生成炸弹再生成新的Gem，新产生的炸弹目前默认是在第0行，如需在任意位置则需要修改此时行列值
-        if (this.bombNumEatchRound > 0 &&  Utils.RandomFloatVale(0.0f, 100.0f) < 30)
+        if (this.bombNumEatchRound > 0 &&  Utils.RandomFloatVale(0.0f, 100.0f) < 90)
         {
             return true;
         }

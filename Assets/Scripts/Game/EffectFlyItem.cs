@@ -38,7 +38,7 @@ public class EffectFlyItem : MonoBehaviour,IFlyComponent
         //this.MovePath(pos,tartPos);
     }
 
-    void Update()
+    public virtual void Update()
     {
         if (isCanMove)
         {
