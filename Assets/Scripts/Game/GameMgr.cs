@@ -110,6 +110,9 @@ public class GameMgr : MonoBehaviour
     {
         if (GameCfg.gameState != GameState.idle) { Debug.Log("检测中，请勿重复点击！"); return; }
         gemRandomFullCoroutine = StartCoroutine(RandomFull());
+        //如果不是在挂机状态下，每次点击都需要禁用掉开始按钮
+        GameCfg.isEnableBtnStart = false;
+        EventCenter.Instance.ExcuteEvent(EventNum.EnableOrDisableBtnStartEvent);
     }
 
 #if UNITY_EDITOR
@@ -192,7 +195,12 @@ public class GameMgr : MonoBehaviour
                 //如果没有检测到可以合并的宝石，则全部宝石下落，重新生成所有宝石
                 StartRandomFull();
             }
-            //如果不是挂机状态，则什么都不做，等待玩家点击
+            else
+            {
+                //如果不是挂机状态，则需要开启StartBtn
+                GameCfg.isEnableBtnStart = true;
+                EventCenter.Instance.ExcuteEvent(EventNum.EnableOrDisableBtnStartEvent);
+            }
         }
     }
 

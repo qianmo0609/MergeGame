@@ -23,8 +23,9 @@ public class GameUI : MonoBehaviour
         btnInfo.onClick.Add(new EventDelegate(OnInfoEvent));
         totalScore = new StringBuilder(10);
         comboSB = new StringBuilder(2);
-        EventCenter.Instance.RegisterEvent(EventNum.UpdateTotalScoreEvent,this.UpdateTotalScore);
-        EventCenter.Instance.RegisterEvent(EventNum.ComboDisplayNumEvent,this.UpdateComboTxt);
+        EventCenter.Instance.RegisterEvent(EventNum.UpdateTotalScoreEvent, this.UpdateTotalScore);
+        EventCenter.Instance.RegisterEvent(EventNum.ComboDisplayNumEvent, this.UpdateComboTxt);
+        EventCenter.Instance.RegisterEvent(EventNum.EnableOrDisableBtnStartEvent, this.EnableOrDisableStartBtn);
     }
 
     private void OnStartEvent()
@@ -43,7 +44,6 @@ public class GameUI : MonoBehaviour
             //È¡Ïû¹Ò»ú
             GameCfg.isHandUp = false;
         }
-        
     }
     private void OnHandUpEvent()
     {
@@ -91,10 +91,16 @@ public class GameUI : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         this.txtCombo.gameObject.SetActive(false);
-        if(closeComboTxtCoroutine != null)
+        if (closeComboTxtCoroutine != null)
         {
             StopCoroutine(closeComboTxtCoroutine);
         }
+    }
+
+    void EnableOrDisableStartBtn()
+    {
+        this.btnStart.enabled = GameCfg.isEnableBtnStart;
+        this.btnStart.normalSprite = GameCfg.isEnableBtnStart ? "h5by_xyx_ks" : "h5by_xyx_hsks";
     }
 
     private void OnDestroy()
@@ -110,6 +116,7 @@ public class GameUI : MonoBehaviour
         btnInfo.onClick.Clear();
         EventCenter.Instance.UnregisterEvent(EventNum.UpdateTotalScoreEvent);
         EventCenter.Instance.UnregisterEvent(EventNum.ComboDisplayNumEvent);
+        EventCenter.Instance.UnregisterEvent(EventNum.EnableOrDisableBtnStartEvent);
     }
 }
 
