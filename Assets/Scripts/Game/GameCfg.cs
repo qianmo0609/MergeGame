@@ -60,6 +60,18 @@ public class GameCfg
     public static int[] gemsPercentages = new int[5] { 2000,4000,6000,8000,10000};
 }
 
+public static class ConstValue
+{
+    public static string btnStartNormalSpriteName = "h5by_xyx_ks"; //开始按钮的正常显示精灵名
+    public static string btnStartHandUpSpriteName = "h5by_xyx_qxgj"; //开始按钮在挂机时显示的精灵名
+    public static string btnStartDisableSpriteName = "h5by_xyx_hsks"; //开始按钮在禁用显示的精灵名
+    
+    public static string btnHandUpNormalSpriteName = "h5by_xyx_gj"; //挂机按钮在正常时显示的精灵名
+    public static string btnHandUpHandUpSpriteName = "h5by_xyx_gjz"; //挂机按钮在挂机时显示的精灵名   
+
+
+}
+
 public enum GameState
 {
     idle,

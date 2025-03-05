@@ -39,8 +39,8 @@ public class GameUI : MonoBehaviour
         {
             //如果是在挂机的状态，则现在的就需要将开始按钮的贴图换成开始的贴图
             //挂机按钮的贴图换成，未挂机的贴图
-            btnStart.normalSprite = "h5by_xyx_ks";
-            btnHandUp.normalSprite = "h5by_xyx_gj";
+            btnStart.normalSprite = ConstValue.btnStartNormalSpriteName; //"h5by_xyx_ks";
+            btnHandUp.normalSprite = ConstValue.btnHandUpNormalSpriteName;//"h5by_xyx_gj";
             //取消挂机
             GameCfg.isHandUp = false;
         }
@@ -51,8 +51,8 @@ public class GameUI : MonoBehaviour
         if (!GameCfg.isHandUp)
         {
             GameCfg.isHandUp = true;
-            btnStart.normalSprite = "h5by_xyx_qxgj";
-            btnHandUp.normalSprite = "h5by_xyx_gjz";
+            btnStart.normalSprite = ConstValue.btnStartHandUpSpriteName;//"h5by_xyx_qxgj";
+            btnHandUp.normalSprite = ConstValue.btnHandUpHandUpSpriteName;//"h5by_xyx_gjz";
             EventCenter.Instance.ExcuteEvent(EventNum.TestEvent);
         }
         //挂机状态下，有取消挂机控制
@@ -99,8 +99,9 @@ public class GameUI : MonoBehaviour
 
     void EnableOrDisableStartBtn()
     {
+        if (GameCfg.isHandUp) return;
         this.btnStart.enabled = GameCfg.isEnableBtnStart;
-        this.btnStart.normalSprite = GameCfg.isEnableBtnStart ? "h5by_xyx_ks" : "h5by_xyx_hsks";
+        this.btnStart.normalSprite = GameCfg.isEnableBtnStart ? ConstValue.btnStartNormalSpriteName : ConstValue.btnStartDisableSpriteName;
     }
 
     private void OnDestroy()
