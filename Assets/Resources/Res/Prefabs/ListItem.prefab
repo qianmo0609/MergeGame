@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4603221157752954435}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -228, y: 0, z: 0}
+  m_LocalPosition: {x: -193, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -113,7 +113,7 @@ Transform:
   m_GameObject: {fileID: 4826877177423031148}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 221, y: 0, z: 0}
+  m_LocalPosition: {x: 181, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 8546798703299955934}
   - component: {fileID: 1550485188770026600}
   - component: {fileID: 7725995883776945054}
+  - component: {fileID: 3242371277824470795}
   m_Layer: 5
   m_Name: ListItem
   m_TagString: Untagged
@@ -243,8 +244,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 507.47803, y: 51.311234, z: 1}
-  m_Center: {x: -6.086871, y: 5.3254004, z: 0}
+  m_Size: {x: 500, y: 62, z: 1}
+  m_Center: {x: 23.20483, y: 0, z: 0}
 --- !u!114 &7725995883776945054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,3 +260,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 0}
   draggablePanel: {fileID: 0}
+--- !u!114 &3242371277824470795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6504364463105676787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0504fb802dd9541408ffea55bb1d75d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 6818364536687456445}
+  numLabel: {fileID: 2600868340400114205}

@@ -10,6 +10,7 @@ public class GameMgr : MonoBehaviour
     Coroutine creategemCoroutine = null;
     Coroutine gemRandomFullCoroutine = null;
     Coroutine gemMergeCoroutione = null;
+    Coroutine restartCoroutione = null;
 
     List<GemsItem> gemsItemsCollect;
     Stack<GemsItem> mergeItemCollect; //用于存储需要消除的物体
@@ -62,9 +63,9 @@ public class GameMgr : MonoBehaviour
            3$$$$
            行和列从左上角开始计算第一行第一列
          */
-        for (int j = 3; j >= 0; j--)
+        for (int j = GameCfg.row - 1; j >= 0; j--)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < GameCfg.col; i++)
             { 
                 GemsItem gemItem = CreateOneGemItem(Utils.GetCurrentPos(j,i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i)); 
                 gemsItemsCollect.Add(gemItem);
@@ -104,10 +105,6 @@ public class GameMgr : MonoBehaviour
     {
         if (GameCfg.gameState != GameState.idle) { Debug.Log("检测中，请勿重复点击！"); return; }
         gemRandomFullCoroutine = StartCoroutine(RandomFull());
-        //gameMap.OnRecreate();
-        //this.TestMerge();
-        //this.TestFlyItem();
-        //this.CreateBomb(Utils.GetCurrentPos(0,2),0,2);
     }
 
 #if UNITY_EDITOR
@@ -155,6 +152,8 @@ public class GameMgr : MonoBehaviour
             });
             yield return new WaitForSeconds(0.02f);
         }
+        //清空分数显示
+        scoreList.OnRestInfo();
         //掉落完成之后要清除这部分宝石
         gemsItemsCollect.Clear();
         //重置每轮炸弹数
@@ -367,7 +366,7 @@ public class GameMgr : MonoBehaviour
     void CreateFlyGemItem(MergeInfo mergeInfo)
     {
         //增加本地数据记录
-        LocalData.Instance.AddScoreData(new ScoreData { type = mergeInfo.type, score = mergeInfo.score});
+        LocalData.Instance.AddScoreData(new ScoreData { type = mergeInfo.type, num = mergeInfo.num});
         //增加从一个飞行物体飞到指定位置
         scoreList.AddItem(mergeInfo);
     }
@@ -417,18 +416,32 @@ public class GameMgr : MonoBehaviour
         this.MergeGemAndMove(mergeInfo.row, mergeInfo.col);
         if (gameMap.DestroyWall())
         {
-            //首先需要将游戏状态改为游戏结束状态
-            GameCfg.gameState = GameState.gameOver;
-            GameCfg.level++;
-            if(GameCfg.level == 4)
-            {
-                GameCfg.level = 1;
-            }
-            //如果砖块没了，则切换到下一个关卡布局
-            scoreList.OnRestInfo();
-            gemRandomFullCoroutine = StartCoroutine(RandomFull(false));
-            //重新布局地图
-            gameMap.OnRecreate();
+            restartCoroutione = StartCoroutine(this.OnRestartGame());
+        }
+    }
+
+    IEnumerator OnRestartGame()
+    {   //首先需要将游戏状态改为游戏结束状态
+        GameCfg.gameState = GameState.gameOver;
+        GameCfg.level++;
+        if (GameCfg.level == 4)
+        {
+            GameCfg.level = 1;
+        }
+        Vector2Int ly = GameCfg.gameLayout[GameCfg.level - 1];
+        GameCfg.row = ly.x;
+        GameCfg.col = ly.y;
+        //如果砖块没了，则切换到下一个关卡布局
+        scoreList.OnRestInfo();
+        gemRandomFullCoroutine = StartCoroutine(RandomFull(false));
+        yield return new WaitForSeconds(2f);
+        //重新布局地图
+        gameMap.OnRecreate();
+        this.StartCreateGems();
+        if(restartCoroutione != null)
+        {
+            StopCoroutine(restartCoroutione);
+            restartCoroutione = null;
         }
     }
 

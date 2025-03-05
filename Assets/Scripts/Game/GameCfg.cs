@@ -7,6 +7,7 @@ public class GameCfg
     public static int row = 4;
     public static int col = 4;
 
+    public static Vector2Int[] gameLayout = new Vector2Int[3] { new Vector2Int(4, 4), new Vector2Int(5, 5), new Vector2Int(6, 6) };
     public static float offsetX = 0.68f;
     public static float offsetY = 0.64f;
 
@@ -16,12 +17,12 @@ public class GameCfg
 
     public static bool isHandUp = false; //是否挂起
 
-    public static Vector3[] startPoss = new Vector3[] { new Vector3(-1f, 0.03f, 0), new Vector3(-1f, 0.03f, 0), new Vector3(-1f, 0.03f, 0) };
+    public static Vector3[] startPoss = new Vector3[] { new Vector3(-1f, 0.03f, 0), new Vector3(-1f, 0.68f, 0), new Vector3(-1.68f, 1.313f, 0) };
 
     public static GameState gameState = GameState.idle; //是否正在匹配
 
-    public static Vector3[] buttomWallStartPos = new Vector3[3] { new Vector3(-1.85f, -2.378f, 0), new Vector3(-1.85f, -2.378f, 0), new Vector3(-1.85f, -2.378f, 0) };
-    public static int[] buttomWallNum = new int[3] { 16, 18, 20 };
+    public static Vector3[] buttomWallStartPos = new Vector3[3] { new Vector3(-1.85f, -2.378f, 0), new Vector3(-1.85f, -2.378f, 0), new Vector3(-2.49f, -2.378f, 0) };
+    public static int[] buttomWallNum = new int[3] { 16, 19, 21 };
 
     public static Vector3[,] wall = new Vector3[,] { { new Vector3(-1.669f, -2.057f, 0), new Vector3(1.709f, -2.057f, 0) }, { new Vector3(-1.669f, -2.057f, 0), new Vector3(2.36f, -2.057f, 0) }, { new Vector3(2.36f, -2.057f, 0), new Vector3(-2.33f, -2.057f, 0) } };
 

@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class LoopListItem : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] UISprite icon;
+    [SerializeField] UILabel numLabel;
+    
+    public void onInitInfo(string name,int num)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        this.icon.spriteName = name;
+        this.numLabel.text = num.ToString();
     }
 }
