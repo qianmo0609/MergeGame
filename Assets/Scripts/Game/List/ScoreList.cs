@@ -137,12 +137,13 @@ public class ScoreList
         {
             ScoreListItem sl = scoreListCollection[i];
             sl.SetItemState(false,GameCfg.spriteRange);
-            Vector3 tarPos = sl.transform.position + new Vector3(Utils.RandomFloatVale(-1.0f, 1f), Utils.RandomFloatVale(0, 1.0f), 0);
-            sl.transform.DOMove(tarPos, 0.3f).SetEase(Ease.OutSine).OnComplete(() =>
-            {
-                //宝石下落
-                sl.transform.DOMoveY(-10, Utils.RandomFloatVale(0.1f, 0.8f)).SetEase(Ease.InExpo).OnComplete(() => { sl.OnRecycleSelf(); });
-            });
+            sl.IsFull = true;
+            //Vector3 tarPos = sl.transform.position + new Vector3(Utils.RandomFloatVale(-1.0f, 1f), Utils.RandomFloatVale(0, 1.0f), 0);
+            //sl.transform.DOMove(tarPos, 0.3f).SetEase(Ease.OutSine).OnComplete(() =>
+            //{
+            //    //宝石下落
+            //    sl.transform.DOMoveY(-10, Utils.RandomFloatVale(0.1f, 0.8f)).SetEase(Ease.InExpo).OnComplete(() => { sl.OnRecycleSelf(); });
+            //});
         }
         scoreListCollection.Clear();
     }

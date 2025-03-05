@@ -15,9 +15,15 @@ public class ScoreListItem : MonoBehaviour
     private MaterialPropertyBlock materialPropertyBlock3;
     private MaterialPropertyBlock materialPropertyBlock4;
 
+    FullComponent fullComponent;
+
     float alphaV = 1;
 
     Coroutine fadeCoroutine = null;
+
+    bool isFull = false;
+
+    public bool IsFull { get { return this.isFull; } set { this.isFull = value;  } }
 
     private void OnEnable()
     {
@@ -25,6 +31,22 @@ public class ScoreListItem : MonoBehaviour
         materialPropertyBlock2 = new MaterialPropertyBlock();
         materialPropertyBlock3 = new MaterialPropertyBlock();
         materialPropertyBlock4 = new MaterialPropertyBlock();
+        fullComponent = new FullComponent(this.transform);
+        fullComponent.UpdateInfo();
+    }
+
+    private void Update()
+    {
+        if (this.isFull)
+        {
+            fullComponent.Update(this.UpadteCB);
+        }
+    }
+
+    void UpadteCB()
+    {
+        this.isFull = false;
+        this.OnRecycleSelf();
     }
 
     public void OnSetInfo(Sprite icon, int num)

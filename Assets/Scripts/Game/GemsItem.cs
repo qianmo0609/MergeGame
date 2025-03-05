@@ -18,6 +18,8 @@ public class GemsItem : MonoBehaviour
     bool isBomb;
     Tween mTween;
 
+    FullComponent fullComponent;
+
     public int GemType { get => gemType; }
     public DirEnum _DirEnum { get => dirEnum; }
     public Vector2Int Idx { get => idx; set => idx = value; }
@@ -27,21 +29,27 @@ public class GemsItem : MonoBehaviour
         get { return isFull; } 
         set { 
             isFull = value;
-            vh = Utils.RandomFloatVale(-2,2);
-            a = 20;
-            aa = 50;
-            vv = Utils.RandomFloatVale(5,8);
+            //vh = Utils.RandomFloatVale(-2,2);
+            //a = 20;
+            //aa = 50;
+            //vv = Utils.RandomFloatVale(5,8);
+            fullComponent.UpdateInfo();
         } 
     }
 
     Vector3 currentPos;
 
     bool isFull = false;
-    float vv = 3;
-    float vh = 0;
+    //float vv = 3;
+    //float vh = 0;
 
-    float a = 0;
-    float aa = 0;
+    //float a = 0;
+    //float aa = 0;
+
+    private void Start()
+    {
+        fullComponent = new FullComponent(this.transform);
+    }
 
     public void OnInitInfo(Sprite gemIcon, int type, DirEnum dirEnum, Vector2Int idx, bool isBomb = false)
     {
@@ -59,16 +67,23 @@ public class GemsItem : MonoBehaviour
     {
         if (this.isFull)
         {
-            vv -= a * Time.deltaTime;
-            a = Mathf.Min(50, a + aa * Time.deltaTime);
-            this.transform.position += new Vector3(vh, vv, 0) * Time.deltaTime;
+            //vv -= a * Time.deltaTime;
+            //a = Mathf.Min(50, a + aa * Time.deltaTime);
+            //this.transform.position += new Vector3(vh, vv, 0) * Time.deltaTime;
 
-            if(this.transform.position.y < -10)
-            {
-                this.isFull = false;
-                this.RecycleSelf();
-            }
+            //if(this.transform.position.y < -10)
+            //{
+            //    this.isFull = false;
+            //    this.RecycleSelf();
+            //}
+            fullComponent?.Update(this.UpdateCB);
         }   
+    }
+
+    void UpdateCB()
+    {
+        this.isFull = false;
+        this.RecycleSelf();
     }
 
     public Tween TweenTOPosition()

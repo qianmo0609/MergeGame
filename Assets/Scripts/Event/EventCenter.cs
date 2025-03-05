@@ -32,6 +32,7 @@ public class EventCenter : Singleton<EventCenter>
 
     public void UnregisterEvent(int id)
     {
+        if (this.evnetDic == null) return;
         Action callBc;
         if (evnetDic.TryGetValue(id, out callBc))
         {
