@@ -197,6 +197,8 @@ public class GameMgr : MonoBehaviour
     /// </summary>
     public void DetectMergeGems()
     {
+        //如果游戏结束了，就不需要检测了
+        if (GameCfg.gameState == GameState.gameOver) return;
         //如果检测到有可以清除的宝石，执行清除方法
         if (DetectGemsMethod())
         {
@@ -532,6 +534,7 @@ public class GameMgr : MonoBehaviour
         this.MergeGemAndMove(mergeInfo.row, mergeInfo.col);
         if (gameMap.DestroyWall())
         {
+            GameCfg.gameState = GameState.gameOver;
             restartCoroutione = StartCoroutine(this.OnRestartGame());
         }
     }
@@ -540,9 +543,8 @@ public class GameMgr : MonoBehaviour
     {
         //检测如果游戏不在空闲状态需要等待
         //等待上边整理完
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(1f);
         //首先需要将游戏状态改为游戏结束状态
-        GameCfg.gameState = GameState.gameOver;
         GameCfg.level++;
         if (GameCfg.level == 4)
         {

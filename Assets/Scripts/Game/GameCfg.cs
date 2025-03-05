@@ -24,7 +24,7 @@ public class GameCfg
     public static Vector3[] buttomWallStartPos = new Vector3[3] { new Vector3(-1.85f, -2.378f, 0), new Vector3(-1.85f, -2.378f, 0), new Vector3(-2.49f, -2.378f, 0) };
     public static int[] buttomWallNum = new int[3] { 16, 19, 21 };
 
-    public static Vector3[,] wall = new Vector3[,] { { new Vector3(-1.669f, -2.057f, 0), new Vector3(1.709f, -2.057f, 0) }, { new Vector3(-1.669f, -2.057f, 0), new Vector3(2.36f, -2.057f, 0) }, { new Vector3(2.36f, -2.057f, 0), new Vector3(-2.33f, -2.057f, 0) } };
+    public static Vector3[,] wall = new Vector3[,] { { new Vector3(-1.669f, -2.057f, 0), new Vector3(1.709f, -2.057f, 0) }, { new Vector3(-1.669f, -2.057f, 0), new Vector3(2.36f, -2.057f, 0) }, { new Vector3(-2.33f, -2.057f, 0),new Vector3(2.36f, -2.057f, 0)} };
 
     public static float uiYInterval = 75f;
 
