@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 4513730045234405457}
   - component: {fileID: 2567858745841351807}
   m_Layer: 5
-  m_Name: Label
+  m_Name: txtTotalScore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
-  mText: x4000
+  mText: x0
   mFontSize: 35
   mFontStyle: 0
   mAlignment: 0
@@ -928,3 +928,4 @@ MonoBehaviour:
   btnHandUp: {fileID: 7705848155126299630}
   btnRecord: {fileID: 6769039819675951174}
   btnInfo: {fileID: 6949364936839829735}
+  txtTotalScore: {fileID: 2567858745841351807}

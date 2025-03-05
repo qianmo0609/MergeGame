@@ -7,6 +7,8 @@ public class GameCfg
     public static int row = 4;
     public static int col = 4;
 
+    public static int totalScore = 0;
+
     public static Vector2Int[] gameLayout = new Vector2Int[3] { new Vector2Int(4, 4), new Vector2Int(5, 5), new Vector2Int(6, 6) };
     public static float offsetX = 0.68f;
     public static float offsetY = 0.64f;
@@ -48,6 +50,11 @@ public class GameCfg
 
     public static Vector4 spriteClipRange = new Vector4(-5,-3,-1.8f,1.15f);
     public static Vector4 spriteRange = new Vector4(-10,10,-10,10);
+
+    public static float bombPercentageDenominator = 100; //炸弹概率的分母
+    public static float bombPercentageNumerator = 90;  //炸弹概率的分子
+
+    public static int[] gemsPercentages = new int[5] { 2000,4000,6000,8000,10000};
 }
 
 public enum GameState

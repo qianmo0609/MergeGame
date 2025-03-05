@@ -28,7 +28,8 @@ public class GemsItem : MonoBehaviour
         set { 
             isFull = value;
             vh = Utils.RandomFloatVale(-2,2);
-            a = 30;
+            a = 20;
+            aa = 50;
             vv = Utils.RandomFloatVale(5,8);
         } 
     }
@@ -40,6 +41,7 @@ public class GemsItem : MonoBehaviour
     float vh = 0;
 
     float a = 0;
+    float aa = 0;
 
     public void OnInitInfo(Sprite gemIcon, int type, DirEnum dirEnum, Vector2Int idx, bool isBomb = false)
     {
@@ -58,6 +60,7 @@ public class GemsItem : MonoBehaviour
         if (this.isFull)
         {
             vv -= a * Time.deltaTime;
+            a = Mathf.Min(50, a + aa * Time.deltaTime);
             this.transform.position += new Vector3(vh, vv, 0) * Time.deltaTime;
 
             if(this.transform.position.y < -10)

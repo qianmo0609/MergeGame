@@ -5,4 +5,5 @@ using UnityEngine;
 public class EventNum
 {
     public static int TestEvent = 0x0;
+    public static int UpdateTotalScoreEvent = 0x1;
 }

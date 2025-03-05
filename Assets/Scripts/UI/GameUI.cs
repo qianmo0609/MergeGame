@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class GameUI : MonoBehaviour
 {
@@ -9,6 +7,8 @@ public class GameUI : MonoBehaviour
     [SerializeField] UIButton btnHandUp;
     [SerializeField] UIButton btnRecord;
     [SerializeField] UIButton btnInfo;
+    [SerializeField] UILabel txtTotalScore;
+    StringBuilder totalScore;
 
     private void Start()
     {
@@ -16,6 +16,8 @@ public class GameUI : MonoBehaviour
         btnHandUp.onClick.Add(new EventDelegate(OnHandUpEvent));
         btnRecord.onClick.Add(new EventDelegate(OnRecordEvent));
         btnInfo.onClick.Add(new EventDelegate(OnInfoEvent));
+        totalScore = new StringBuilder(10);
+        EventCenter.Instance.RegisterEvent(EventNum.UpdateTotalScoreEvent,this.UpdateTotalScore);
     }
 
     private void OnStartEvent()
@@ -57,6 +59,14 @@ public class GameUI : MonoBehaviour
     private void OnInfoEvent()
     {
         UIManager.Instance.GetWindow<RuleUI>().Show();
+    }
+
+    private void UpdateTotalScore()
+    {
+        totalScore.Clear();
+        totalScore.Append("x");
+        totalScore.Append(GameCfg.totalScore.ToString());
+        this.txtTotalScore.text = totalScore.ToString();
     }
 
     private void OnDestroy()

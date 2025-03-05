@@ -49,4 +49,16 @@ public class Utils
         float uu = u * u;
         return uu * p0 + 2 * u * t * p1 + tt * p2;
     }
+
+    public static int getGemsIdx(int percentNum)
+    {
+        for (int i = 0; i < GameCfg.gemsPercentages.Length; i++)
+        {
+            if(percentNum <= GameCfg.gemsPercentages[i])
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
 }
