@@ -177,10 +177,13 @@ public class GameMgr : MonoBehaviour
         //如果检测到有可以清除的宝石，执行清除方法
         if (DetectGemsMethod())
         {
+            GameCfg.comboNum++;
             gemMergeCoroutione = StartCoroutine(MergeGems());
         }
         else
         {
+            //通知UI显示Combo的次数
+            EventCenter.Instance.ExcuteEvent(EventNum.ComboDisplayNumEvent);
             //没有检测到可以清除的宝石则合并状态结束
             GameCfg.gameState = GameState.idle;
             //如果是挂机状态,在没有可消除的物体时才下落

@@ -8,6 +8,7 @@ public class GameCfg
     public static int col = 4;
 
     public static int totalScore = 0;
+    public static int comboNum = 0;
 
     public static Vector2Int[] gameLayout = new Vector2Int[3] { new Vector2Int(4, 4), new Vector2Int(5, 5), new Vector2Int(6, 6) };
     public static float offsetX = 0.68f;

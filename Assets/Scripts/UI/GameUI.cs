@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Text;
 using UnityEngine;
 
@@ -8,7 +9,11 @@ public class GameUI : MonoBehaviour
     [SerializeField] UIButton btnRecord;
     [SerializeField] UIButton btnInfo;
     [SerializeField] UILabel txtTotalScore;
+    [SerializeField] UILabel txtCombo;
     StringBuilder totalScore;
+    StringBuilder comboSB;
+
+    Coroutine closeComboTxtCoroutine;
 
     private void Start()
     {
@@ -17,7 +22,9 @@ public class GameUI : MonoBehaviour
         btnRecord.onClick.Add(new EventDelegate(OnRecordEvent));
         btnInfo.onClick.Add(new EventDelegate(OnInfoEvent));
         totalScore = new StringBuilder(10);
+        comboSB = new StringBuilder(2);
         EventCenter.Instance.RegisterEvent(EventNum.UpdateTotalScoreEvent,this.UpdateTotalScore);
+        EventCenter.Instance.RegisterEvent(EventNum.ComboDisplayNumEvent,this.UpdateComboTxt);
     }
 
     private void OnStartEvent()
@@ -69,12 +76,40 @@ public class GameUI : MonoBehaviour
         this.txtTotalScore.text = totalScore.ToString();
     }
 
+    private void UpdateComboTxt()
+    {
+        if (GameCfg.comboNum <= 0) return;
+        this.txtCombo.gameObject.SetActive(true);
+        comboSB.Clear();
+        comboSB.Append(GameCfg.comboNum);
+        this.txtCombo.text = comboSB.ToString();
+        GameCfg.comboNum = 0;
+        closeComboTxtCoroutine = StartCoroutine(CloseComboTxt());
+    }
+
+    IEnumerator CloseComboTxt()
+    {
+        yield return new WaitForSeconds(1);
+        this.txtCombo.gameObject.SetActive(false);
+        if(closeComboTxtCoroutine != null)
+        {
+            StopCoroutine(closeComboTxtCoroutine);
+        }
+    }
+
     private void OnDestroy()
     {
+        comboSB.Clear();
+        comboSB = null;
+        totalScore.Clear();
+        totalScore = null;
+        closeComboTxtCoroutine = null;
         btnStart.onClick.Clear();
         btnHandUp.onClick.Clear();
         btnRecord.onClick.Clear();
         btnInfo.onClick.Clear();
+        EventCenter.Instance.UnregisterEvent(EventNum.UpdateTotalScoreEvent);
+        EventCenter.Instance.UnregisterEvent(EventNum.ComboDisplayNumEvent);
     }
 }
 
