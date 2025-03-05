@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.AI;
 
 public class GameMgr : MonoBehaviour
 {
@@ -26,6 +25,7 @@ public class GameMgr : MonoBehaviour
     private bool[,] visited;// 检测标记数组
 
     #region yiled return 定义
+    WaitForSeconds ws001;
     WaitForSeconds ws01;
     WaitForSeconds ws02;
     WaitForSeconds ws03;
@@ -53,6 +53,7 @@ public class GameMgr : MonoBehaviour
 
     void CreateWS()
     {
+        ws001 = new WaitForSeconds(.01f);
         ws01 = new WaitForSeconds(.1f);
         ws02 = new WaitForSeconds(.2f);
         ws03 = new WaitForSeconds(.3f);
@@ -94,9 +95,10 @@ public class GameMgr : MonoBehaviour
         {
             for (int i = 0; i < GameCfg.col; i++)
             {
-                gemItem = CreateOneGemItem(Utils.GetCurrentPos(j,i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i)); 
+                gemItem = CreateOneGemItem(Utils.GetCurrentPos(j,i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i));
+                //gemItem = CreateOneGemItem(Utils.GetStartPos(j, i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i));
                 gemsItemsCollect.Add(gemItem);
-                yield return ws01;
+                yield return ws01;// new WaitForSeconds(.01f);
             }
         }
         yield return ws02;

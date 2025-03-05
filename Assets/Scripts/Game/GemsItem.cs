@@ -86,10 +86,10 @@ public class GemsItem : MonoBehaviour
         this.RecycleSelf();
     }
 
-    public Tween TweenTOPosition()
+    public Tween TweenTOPosition(float duration = .2f)
     {
         currentPos = Utils.GetNextPos(this.idx.x,this.idx.y);
-        mTween = this.transform.DOMove(currentPos, 0.2f).SetEase(Ease.OutBounce);
+        mTween = this.transform.DOMove(currentPos, duration).SetEase(Ease.OutBounce);
         return mTween;
     }
 

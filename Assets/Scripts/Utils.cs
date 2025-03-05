@@ -27,6 +27,11 @@ public class Utils
         return GameCfg.startPoss[GameCfg.level - 1] + GetGemItemPos(row, col);
     }
 
+    public static Vector3 GetStartPos(int row, int col)
+    {
+        return GameCfg.startPoss[GameCfg.level - 1] + new Vector3(GameCfg.offsetX * col, GameCfg.offsetY * 5, 0);
+    }
+
     public static Vector3 GetNGUIPos(int row)
     {
         return Vector3.up * (GameCfg.uiYStartPos[GameCfg.level - 1] - row * GameCfg.uiYInterval);

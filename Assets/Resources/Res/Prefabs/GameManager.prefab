@@ -44,14 +44,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fc7efa1fe93255449727612432735c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiRootPrefab: {fileID: 5479225062397866873, guid: b43bd971ad46e054db8e89d3e177cfd6, type: 3}
-  slotPrefab: {fileID: 9093060777796636493, guid: 9ae8e35abfbf8b140b6c2b131dd1b9b5, type: 3}
-  slotBGPrefab: {fileID: 9173539374665197488, guid: bc852d77123f4aa4b99b2ac0728ba62b, type: 3}
-  wall: {fileID: 2840063521171657516, guid: 4eda941235834d44084e4be72c3eb9d2, type: 3}
-  buttomWall: {fileID: 7412700016257161181, guid: dde74fb81a8ba4043b166abaebd8b24b, type: 3}
-  gemsSprites:
-  - {fileID: 21300000, guid: 966aca1e71d1acf4989a9dee69161e60, type: 3}
-  - {fileID: 21300000, guid: a8cded4de768dc14a981005b1e61a92f, type: 3}
-  - {fileID: 21300000, guid: 54e01ec5a85a51e41843440d1c34e0eb, type: 3}
-  - {fileID: 21300000, guid: 55c413090d6f20a4b93b51a5613ab82a, type: 3}
-  - {fileID: 21300000, guid: fa7cb26e4bbae2f40b90c20839df2d19, type: 3}
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.4916332
+      value: 0.14499821
+      inSlope: 0.4481795
+      outSlope: 0.4481795
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.08093037
+      outWeight: 0.37709016
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
