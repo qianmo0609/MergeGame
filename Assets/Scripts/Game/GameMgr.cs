@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class GameMgr : MonoBehaviour
@@ -25,7 +26,7 @@ public class GameMgr : MonoBehaviour
     private bool[,] visited;// 检测标记数组
 
     #region yiled return 定义
-    WaitForSeconds ws001;
+    WaitForSeconds ws005;
     WaitForSeconds ws01;
     WaitForSeconds ws02;
     WaitForSeconds ws03;
@@ -53,7 +54,7 @@ public class GameMgr : MonoBehaviour
 
     void CreateWS()
     {
-        ws001 = new WaitForSeconds(.01f);
+        ws005 = new WaitForSeconds(.015f);
         ws01 = new WaitForSeconds(.1f);
         ws02 = new WaitForSeconds(.2f);
         ws03 = new WaitForSeconds(.3f);
@@ -90,15 +91,14 @@ public class GameMgr : MonoBehaviour
            3$$$$
            行和列从左上角开始计算第一行第一列
          */
-        GemsItem gemItem = null;
         for (int j = GameCfg.row - 1; j >= 0; j--)
         {
             for (int i = 0; i < GameCfg.col; i++)
             {
-                gemItem = CreateOneGemItem(Utils.GetCurrentPos(j,i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i));
-                //gemItem = CreateOneGemItem(Utils.GetStartPos(j, i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i));
+                //gemItem = CreateOneGemItem(Utils.GetCurrentPos(j,i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i));
+                GemsItem gemItem = CreateOneGemItem(Utils.GetStartPos(j, i), i <= 1 ? DirEnum.left : DirEnum.right, new Vector2Int(j, i));
                 gemsItemsCollect.Add(gemItem);
-                yield return ws01;// new WaitForSeconds(.01f);
+                yield return ws005;
             }
         }
         yield return ws02;
@@ -125,7 +125,7 @@ public class GameMgr : MonoBehaviour
             //Utils.RandomIntVale(0, ResManager.Instance.gemsSprites.Length);
             gemItem.OnInitInfo(isCreateBomb?ResManager.Instance.bombSprite:ResManager.Instance.gemsSprites[spriteIdx], spriteIdx, dir, idx,isCreateBomb);
         }
-        gemItem.TweenTOPosition();
+        gemItem.TweenTOPosition(.3f);
         return gemItem;
     }
 
@@ -256,7 +256,7 @@ public class GameMgr : MonoBehaviour
         //            mergeItemCollect.Push(g2);
         //            mergeItemCollect.Push(g3);
 
-        //            this.AddMergeInfo(g1.GemType, 100, g1.Type, g1.Idx.x,g1.Idx.y,3);
+        //            this.AddMergeInfo(g1.GemType, 100, g1.Type, g1.Idx.x, g1.Idx.y, 3);
         //            isMatch = true;
         //        }
         //    }
@@ -293,7 +293,7 @@ public class GameMgr : MonoBehaviour
         //                isMatch = true;
         //                num++;
         //            }
-        //            this.AddMergeInfo(g1.GemType, 100, g1.Type, g1.Idx.x,g1.Idx.y,num);
+        //            this.AddMergeInfo(g1.GemType, 100, g1.Type, g1.Idx.x, g1.Idx.y, num);
         //        }
         //    }
         //}
@@ -367,13 +367,12 @@ public class GameMgr : MonoBehaviour
         return matches.Count >= 4 ? matches : null;
     }
 
-    HashSet<GemsItem> allMatches;
+    HashSet<GemsItem> allMatches = new HashSet<GemsItem>();
     public bool CheckAllMatches()
     {
         // 重置访问标记
         System.Array.Clear(visited, 0, visited.Length);
-
-        allMatches = new HashSet<GemsItem>();
+        allMatches.Clear();
 
         GemsItem g;
         // 遍历整个网格
@@ -432,7 +431,7 @@ public class GameMgr : MonoBehaviour
         {
             EffectManager.Instance.CreateEffectTextItem(item.score, Utils.GetNGUIPos(item.row), gameMap.UiRoot.transform);
             this.CreateFlyGemItem(item);
-            yield return ws01;
+            yield return new WaitForSeconds(.1f);
         }
         //先清除棋盘上的gem和播放特效
         //foreach (var item in mergeItemCollect)
@@ -442,8 +441,9 @@ public class GameMgr : MonoBehaviour
         foreach (var item in allMatches)
         {
             item.PlayMergeEffect();
+            //gemsItemsCollect[(GameCfg.row - item.Idx.x - 1) * GameCfg.row + item.Idx.y] = null;
         }
-        yield return ws05;
+        yield return new WaitForSeconds(.5f);
         //再整理棋盘
         //while (mergeItemCollect.Count > 0)
         //{
@@ -454,6 +454,7 @@ public class GameMgr : MonoBehaviour
         foreach (var item in allMatches)
         {
             MergeGemAndMove(item.Idx.x, item.Idx.y);
+            //MergeGemAndMove_(item.Idx.x, item.Idx.y);
             item.RecycleSelf();
         }
 
@@ -493,19 +494,22 @@ public class GameMgr : MonoBehaviour
     {
         int xIdx = x;
         //如g是第二行的元素，要从第三行、第四行将元素下移
-        Sequence sequence = DOTween.Sequence();
+        //Sequence sequence = DOTween.Sequence();
         for (int i = x; i > 0; i--)
         {
             //得到上一行的GemItem
             GemsItem g1 = gemsItemsCollect[(GameCfg.row - i) * GameCfg.row + y];
+            //清空原位置数据
+            gemsItemsCollect[(GameCfg.row - i) * GameCfg.row + y] = null;
             //将得到的GemItem赋值给下一行
             gemsItemsCollect[(GameCfg.row - i - 1) * GameCfg.row + y] = g1;
             g1.Idx = new Vector2Int(xIdx, y);
             //将GemItem滑动到下一行
-            sequence.Join(g1.TweenTOPosition());
+            //sequence.Join(g1.TweenTOPosition());
+            g1.TweenTOPosition();
             xIdx--;
         }
-        sequence.Play();
+        //sequence.Play();
         bool isCreateBomb = false;
         //先计算炸弹概率，是否需要生成炸弹
         if (this.CalacBombPercentage())
@@ -517,7 +521,7 @@ public class GameMgr : MonoBehaviour
             this.bombNumEatchRound--;
         }
         //补充新的GemsItem到顶部位置
-        this.ReplenishGem(0, y, Utils.GetCurrentPos(0, y),isCreateBomb);
+        this.ReplenishGem(0, y, Utils.GetStartPos(0, y), isCreateBomb);
     }
 
     void CreateBomb(Vector3 curPos,int x, int y)

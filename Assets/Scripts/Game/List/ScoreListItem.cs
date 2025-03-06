@@ -52,8 +52,8 @@ public class ScoreListItem : MonoBehaviour
     public void OnSetInfo(Sprite icon, int num)
     {
         this.icon.sprite = icon;
-        alphaV = 0;
-        this.OnSetRenderInfo();
+        //alphaV = 0;
+        //this.OnSetRenderInfo();
         Vector3 pos = scoreGe.transform.localPosition;
         int shiValue = num / 10;
         if (shiValue > 0)
@@ -74,7 +74,7 @@ public class ScoreListItem : MonoBehaviour
         //设置个位数字
         scoreGe.sprite = ResManager.Instance.comboSprites[num % 10];
         
-        fadeCoroutine = StartCoroutine(this.OnFade());
+        //fadeCoroutine = StartCoroutine(this.OnFade());
     }
 
     IEnumerator OnFade()

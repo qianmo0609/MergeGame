@@ -6,34 +6,36 @@ public class FullComponent
     float vv = 3; //重力方向速度
     float vh = 0; //水平方向速度
 
-    float a = 0;  //加速度
-    float aa = 0; //加速度的加速度
-
     Transform ctlObj = null;
+
+    AnimationCurve curve;
+    float t = 0;
+    float multy;
 
     public FullComponent(Transform ctlObj)
     {
-        this.ctlObj = ctlObj;        
+        this.ctlObj = ctlObj;
+        curve = CurveManager.Instance.gravityAnimationCurve;
     }
 
     public void UpdateInfo()
     {
-        vh = Utils.RandomFloatVale(-2, 2);
-        a = 20;
-        aa = 50;
-        vv = Utils.RandomFloatVale(5, 8);
+        vh = Utils.RandomFloatVale(-5, 5);
+        vv = 7;
+        multy = UnityEngine.Random.Range(3.0f,8.0f);
     }
 
     public void Update(Action cb)
     {
         if (this.ctlObj == null) return;
-        vv -= a * Time.deltaTime;
-        a = Mathf.Min(50, a + aa * Time.deltaTime);
+        t += Time.deltaTime * 2f;
+        vv -= curve.Evaluate(t) * this.multy;
         this.ctlObj.transform.position += new Vector3(vh, vv, 0) * Time.deltaTime;
 
         if (this.ctlObj.transform.position.y < -10)
         {
             cb?.Invoke();
+            t = 0;
         }
     }
 }

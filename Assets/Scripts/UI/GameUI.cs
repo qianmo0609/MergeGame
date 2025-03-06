@@ -10,6 +10,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] UIButton btnInfo;
     [SerializeField] UILabel txtTotalScore;
     [SerializeField] UILabel txtCombo;
+    [SerializeField] TweenAlpha tweenAlpha;
     StringBuilder totalScore;
     StringBuilder comboSB;
 
@@ -79,7 +80,8 @@ public class GameUI : MonoBehaviour
     private void UpdateComboTxt()
     {
         if (GameCfg.comboNum <= 0) return;
-        this.txtCombo.gameObject.SetActive(true);
+        //this.txtCombo.gameObject.SetActive(true);
+        tweenAlpha.PlayReverse();
         comboSB.Clear();
         comboSB.Append(GameCfg.comboNum);
         this.txtCombo.text = comboSB.ToString();
@@ -90,7 +92,8 @@ public class GameUI : MonoBehaviour
     IEnumerator CloseComboTxt()
     {
         yield return new WaitForSeconds(1);
-        this.txtCombo.gameObject.SetActive(false);
+        tweenAlpha.PlayForward();
+        //this.txtCombo.gameObject.SetActive(false);
         if (closeComboTxtCoroutine != null)
         {
             StopCoroutine(closeComboTxtCoroutine);

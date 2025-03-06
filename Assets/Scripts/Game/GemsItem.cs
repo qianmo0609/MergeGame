@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System;
 using UnityEngine;
 
 public enum DirEnum
@@ -16,7 +15,6 @@ public class GemsItem : MonoBehaviour
     [SerializeField]
     Vector2Int idx; //用于保存物体在什么位置 x表示的是行，y表示的是列
     bool isBomb;
-    Tween mTween;
 
     FullComponent fullComponent;
 
@@ -29,10 +27,6 @@ public class GemsItem : MonoBehaviour
         get { return isFull; } 
         set { 
             isFull = value;
-            //vh = Utils.RandomFloatVale(-2,2);
-            //a = 20;
-            //aa = 50;
-            //vv = Utils.RandomFloatVale(5,8);
             fullComponent.UpdateInfo();
         } 
     }
@@ -40,11 +34,6 @@ public class GemsItem : MonoBehaviour
     Vector3 currentPos;
 
     bool isFull = false;
-    //float vv = 3;
-    //float vh = 0;
-
-    //float a = 0;
-    //float aa = 0;
 
     private void Start()
     {
@@ -67,15 +56,6 @@ public class GemsItem : MonoBehaviour
     {
         if (this.isFull)
         {
-            //vv -= a * Time.deltaTime;
-            //a = Mathf.Min(50, a + aa * Time.deltaTime);
-            //this.transform.position += new Vector3(vh, vv, 0) * Time.deltaTime;
-
-            //if(this.transform.position.y < -10)
-            //{
-            //    this.isFull = false;
-            //    this.RecycleSelf();
-            //}
             fullComponent?.Update(this.UpdateCB);
         }   
     }
@@ -88,9 +68,9 @@ public class GemsItem : MonoBehaviour
 
     public Tween TweenTOPosition(float duration = .2f)
     {
+        this.transform.DOComplete();
         currentPos = Utils.GetNextPos(this.idx.x,this.idx.y);
-        mTween = this.transform.DOMove(currentPos, duration).SetEase(Ease.OutBounce);
-        return mTween;
+        return this.transform.DOMove(currentPos, duration).SetEase(Ease.OutBounce);
     }
 
     public void PlayMergeEffect()
@@ -111,8 +91,9 @@ public class GemsItem : MonoBehaviour
             this.BombRecycleSelf();
         }
         this.transform.parent = null;
+        this.transform.position = new Vector3(10000, 10000, 0);
         this.idx = Vector2Int.down;
-        mTween.Kill();
+        this.transform.DOKill();
         PoolManager.Instance.gemsPool.putObjToPool(this);
         this.isFull = false;
     }
@@ -120,7 +101,6 @@ public class GemsItem : MonoBehaviour
     public void BombRecycleSelf()
     {
         this.isBomb = false;
-        this.transform.position = new Vector3(10000, 10000, 0);
         this.gameObject.SetActive(true);
     }
 }
