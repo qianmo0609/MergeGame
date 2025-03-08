@@ -1,7 +1,8 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
+using System.Linq;
 using UnityEngine;
 
 public class GameMgr : MonoBehaviour
@@ -147,8 +148,8 @@ public class GameMgr : MonoBehaviour
     /// </summary>
     void TestMerge()
     { 
-        int row = Random.Range(1, 4);
-        int col = Random.Range(0, 4);
+        int row = UnityEngine.Random.Range(1, 4);
+        int col = UnityEngine.Random.Range(0, 4);
         GemsItem gemItem = gemsItemsCollect[(row - 1) * 4 + col];
         //CollectGrid(gemItem);
     }
@@ -323,13 +324,11 @@ public class GameMgr : MonoBehaviour
         new Vector2Int(0,-1), //左 
         new Vector2Int(0,1) //右
     };
-
-    List<GemsItem> matches = new List<GemsItem>();
-    Queue<GemsItem> queue = new Queue<GemsItem>();
+  
     List<GemsItem> FindMatches(GemsItem startGem)
     {
-        matches.Clear();
-        queue.Clear();
+        List<GemsItem> matches = new List<GemsItem>();
+        Queue<GemsItem> queue = new Queue<GemsItem>();
         int targetType = startGem.GemType;
 
         // 初始化队列
@@ -367,7 +366,7 @@ public class GameMgr : MonoBehaviour
         return matches.Count >= 4 ? matches : null;
     }
 
-    HashSet<GemsItem> allMatches = new HashSet<GemsItem>();
+    List<List<GemsItem>> allMatches = new List<List<GemsItem>>();
     public bool CheckAllMatches()
     {
         // 重置访问标记
@@ -382,7 +381,7 @@ public class GameMgr : MonoBehaviour
             {
                 if (!visited[x, y])
                 {
-                    var matches = FindMatches(gemsItemsCollect[x * GameCfg.row + y]);
+                    var matches = FindMatches(gemsItemsCollect[(GameCfg.row - x - 1) * GameCfg.row + y]);
                     if (matches != null)
                     {
                         g = matches[0];
@@ -391,10 +390,7 @@ public class GameMgr : MonoBehaviour
                         GameCfg.totalScore += matches.Count * 100;
                         //通知UI更新分数
                         EventCenter.Instance.ExcuteEvent(EventNum.UpdateTotalScoreEvent);
-                        foreach (var pos in matches)
-                        {
-                            allMatches.Add(pos);
-                        }
+                        allMatches.Add(matches);
                     }
                 }
             }
@@ -433,15 +429,20 @@ public class GameMgr : MonoBehaviour
             this.CreateFlyGemItem(item);
             yield return new WaitForSeconds(.1f);
         }
+
         //先清除棋盘上的gem和播放特效
         //foreach (var item in mergeItemCollect)
         //{
         //    item.PlayMergeEffect();
         //}
-        foreach (var item in allMatches)
+        for (int i = 0; i < allMatches.Count; i++)
         {
-            item.PlayMergeEffect();
-            //gemsItemsCollect[(GameCfg.row - item.Idx.x - 1) * GameCfg.row + item.Idx.y] = null;
+            foreach (var item in allMatches[i])
+            {
+                item.PlayMergeEffect();
+                //gemsItemsCollect[(GameCfg.row - item.Idx.x - 1) * GameCfg.row + item.Idx.y] = null;
+            }
+            yield return new WaitForSeconds(.5f);
         }
         yield return new WaitForSeconds(.5f);
         //再整理棋盘
@@ -451,11 +452,14 @@ public class GameMgr : MonoBehaviour
         //    MergeGemAndMove(gemsItem.Idx.x, gemsItem.Idx.y);
         //    gemsItem.RecycleSelf();
         //}
-        foreach (var item in allMatches)
+        for (int i = 0;i < allMatches.Count; i++)
         {
-            MergeGemAndMove(item.Idx.x, item.Idx.y);
-            //MergeGemAndMove_(item.Idx.x, item.Idx.y);
-            item.RecycleSelf();
+            foreach (var item in allMatches[i])
+            {
+                MergeGemAndMove(item.Idx.x, item.Idx.y);
+                //MergeGemAndMove_(item.Idx.x, item.Idx.y);
+                item.RecycleSelf();
+            }
         }
 
         //清除缓存的各类型的分数信息
