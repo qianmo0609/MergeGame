@@ -24,7 +24,7 @@ public class EffectFlyItem : MonoBehaviour,IFlyComponent
         Vector3 pos = Utils.GetNextPos(mergeInfo.row, mergeInfo.col);
         SpriteRenderer sp = this.GetComponent<SpriteRenderer>();
         sp.sprite = sprite;
-        sp.sortingOrder = 3;
+        sp.sortingOrder = 4;
         this.transform.position = pos;
         this.transform.localScale = 0.6856104f * Vector3.one;
         this.mergeInfo = mergeInfo;

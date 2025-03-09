@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class GameMgr : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class GameMgr : MonoBehaviour
 
     ScoreList scoreList;
 
-    Dictionary<int,MergeInfo> gemMergeInfos;
+    List<MergeInfo> gemMergeInfos;
 
     int bombNumEatchRound = 1;
     Stack<GemsItem> bombCollecion;
@@ -44,7 +45,7 @@ public class GameMgr : MonoBehaviour
         gameMap = new GameMap();
         gemsItemsCollect = new List<GemsItem>();
         mergeItemCollect = new Stack<GemsItem>();
-        gemMergeInfos = new Dictionary<int, MergeInfo>();
+        gemMergeInfos = new List<MergeInfo>();
         bombCollecion = new Stack<GemsItem>(1);
         visited = new bool[GameCfg.row, GameCfg.col];
         gameMap.OnInitLayout(grid);
@@ -385,7 +386,7 @@ public class GameMgr : MonoBehaviour
                     if (matches != null)
                     {
                         g = matches[0];
-                        this.AddMergeInfo(g.GemType, 100, g.Type, g.Idx.x, g.Idx.y, matches.Count);
+                        this.AddMergeInfo(100, g.Type, g.Idx.x, g.Idx.y, matches.Count);
                         //计算总分数
                         GameCfg.totalScore += matches.Count * 100;
                         //通知UI更新分数
@@ -398,21 +399,10 @@ public class GameMgr : MonoBehaviour
         return allMatches.Count > 0;
     }
 
-    void AddMergeInfo(int gemType, int score, int type, int row, int col,int num)
+    void AddMergeInfo(int score, int type, int row, int col,int num)
     {
-        MergeInfo mergeInfo;
-        if(gemMergeInfos.TryGetValue(gemType,out mergeInfo))
-        {
-            mergeInfo.score += score;
-            mergeInfo.row = row;
-            mergeInfo.col = col;
-            mergeInfo.num += num;
-        }
-        else 
-        {
-            mergeInfo = new MergeInfo {type = type,score = score,row = row,col = col,num = num};
-            gemMergeInfos.Add(gemType, mergeInfo);
-        }
+        MergeInfo mergeInfo = new MergeInfo { type = type, score = score, row = row, col = col, num = num };
+        gemMergeInfos.Add(mergeInfo);
     }
 
     /// <summary>
@@ -422,19 +412,20 @@ public class GameMgr : MonoBehaviour
     {
         //GemsItem gemsItem;
         //生成一个物体飞到旁边，生成一个分数特效文字
-        Dictionary<int, MergeInfo>.ValueCollection merges = gemMergeInfos.Values;
-        foreach (var item in merges)
-        {
-            EffectManager.Instance.CreateEffectTextItem(item.score, Utils.GetNGUIPos(item.row), gameMap.UiRoot.transform);
-            this.CreateFlyGemItem(item);
-            yield return new WaitForSeconds(.1f);
-        }
+        //Dictionary<int, MergeInfo>.ValueCollection merges = gemMergeInfos.Values;
+        //foreach (var item in merges)
+        //{
+        //    EffectManager.Instance.CreateEffectTextItem(item.score, Utils.GetNGUIPos(item.row), gameMap.UiRoot.transform);
+        //    this.CreateFlyGemItem(item);
+        //    yield return new WaitForSeconds(.1f);
+        //}
 
         //先清除棋盘上的gem和播放特效
         //foreach (var item in mergeItemCollect)
         //{
         //    item.PlayMergeEffect();
         //}
+        MergeInfo mergeInfo;
         for (int i = 0; i < allMatches.Count; i++)
         {
             foreach (var item in allMatches[i])
@@ -442,6 +433,9 @@ public class GameMgr : MonoBehaviour
                 item.PlayMergeEffect();
                 //gemsItemsCollect[(GameCfg.row - item.Idx.x - 1) * GameCfg.row + item.Idx.y] = null;
             }
+            mergeInfo = gemMergeInfos[i];
+            EffectManager.Instance.CreateEffectTextItem(mergeInfo.score, Utils.GetNGUIPos(mergeInfo.row), gameMap.UiRoot.transform);
+            this.CreateFlyGemItem(mergeInfo);
             yield return new WaitForSeconds(.5f);
         }
         yield return new WaitForSeconds(.5f);

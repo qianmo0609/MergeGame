@@ -76,6 +76,7 @@ public class GemsItem : MonoBehaviour
     public void PlayMergeEffect()
     {
         this.transform.position = new Vector3(10000, 10000, 0);
+        this.gameObject.SetActive(false);
         //播放爆炸特效动画
         EffectManager.Instance.CreateEffectItem(this.type+1, currentPos);
     }
@@ -96,11 +97,11 @@ public class GemsItem : MonoBehaviour
         this.transform.DOKill();
         PoolManager.Instance.gemsPool.putObjToPool(this);
         this.isFull = false;
+        this.gameObject.SetActive(true);
     }
 
     public void BombRecycleSelf()
     {
         this.isBomb = false;
-        this.gameObject.SetActive(true);
     }
 }

@@ -9,6 +9,7 @@ public class Bomb : EffectFlyItem
 {
     Action<MergeInfo> cb;
     Vector3 tarPos;
+    SpriteRenderer spriteRenderer;
 
     public override void Update()
     {
