@@ -401,7 +401,8 @@ public class GameMgr : MonoBehaviour
     void ReplenishGem(int x, int y, Vector3 curPos, bool isCreateBomb = false)
     {
         GemsItem gNew = gemCtl.CreateOneGemItem(curPos, y < 3 ? DirEnum.left : DirEnum.right, new Vector2Int(0, y), isCreateBomb);
-        gemCtl.gemsItemsCollect[GameCfg.row * (GameCfg.row - 1) + y] = gNew;
+        //gemCtl.gemsItemsCollect[GameCfg.row * (GameCfg.row - 1) + y] = gNew;
+        gemCtl.gemsItemsCollect[Utils.TransformXYTOIndex(0, y)] = gNew;
         //如果是炸弹则添加
         if (isCreateBomb)
         {

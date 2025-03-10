@@ -74,4 +74,15 @@ public class Utils
         new Vector2Int(0,-1), //左 
         new Vector2Int(0,1) //右
     };
+
+    /// <summary>
+    /// 转换XY到当前索引
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public static int TransformXYTOIndex(int x, int y)
+    {
+       return (GameCfg.row - x - 1) * GameCfg.row + y;
+    }
 }

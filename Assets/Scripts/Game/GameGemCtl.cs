@@ -35,15 +35,21 @@ public class GameGemCtl
     public void MergeGemAndMove(int x, int y)
     {
         int xIdx = x;
+        int idx = 0;
         //如g是第二行的元素，要从第三行、第四行将元素下移
         for (int i = x; i > 0; i--)
         {
             //得到上一行的GemItem
-            GemsItem g1 = gemsItemsCollect[(GameCfg.row - i) * GameCfg.row + y];
+            //GemsItem g1 = gemsItemsCollect[(GameCfg.row - i) * GameCfg.row + y];
+            idx = Utils.TransformXYTOIndex(i - 1, y);
+            GemsItem g1 = gemsItemsCollect[idx];
             //清空原位置数据
-            gemsItemsCollect[(GameCfg.row - i) * GameCfg.row + y] = null;
+            //gemsItemsCollect[(GameCfg.row - i) * GameCfg.row + y] = null;
+            gemsItemsCollect[idx] = null;
             //将得到的GemItem赋值给下一行
-            gemsItemsCollect[(GameCfg.row - i - 1) * GameCfg.row + y] = g1;
+            //gemsItemsCollect[(GameCfg.row - i - 1) * GameCfg.row + y] = g1;
+            idx = Utils.TransformXYTOIndex(i, y);
+            gemsItemsCollect[idx] = g1;
             g1.Idx = new Vector2Int(xIdx, y);
             //将GemItem滑动到下一行
             g1.TweenTOPosition();
@@ -73,7 +79,8 @@ public class GameGemCtl
 
     public GemsItem GetGemItem(int x, int y)
     {
-        return this.gemsItemsCollect[(GameCfg.row - x - 1) * GameCfg.row + y];
+        //return this.gemsItemsCollect[(GameCfg.row - x - 1) * GameCfg.row + y];
+        return this.gemsItemsCollect[Utils.TransformXYTOIndex(x,y)];
     }
 
     public List<GemsItem> FindMatches(GemsItem startGem)
@@ -105,7 +112,8 @@ public class GameGemCtl
                    2$$$$
                    3$$$$
                  */
-                GemsItem g = gemsItemsCollect[(GameCfg.row - next.x - 1) * GameCfg.row + next.y];
+                //GemsItem g = gemsItemsCollect[(GameCfg.row - next.x - 1) * GameCfg.row + next.y];
+                GemsItem g = gemsItemsCollect[Utils.TransformXYTOIndex(next.x, next.y)];
                 // 类型检查 && 访问标记 
                 if (!visited[next.x, next.y] && (g.GemType & targetType) != 0)
                 {
