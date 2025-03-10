@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 7725995883776945054}
   - component: {fileID: 3242371277824470795}
   m_Layer: 5
-  m_Name: ListItem
+  m_Name: LoopListItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

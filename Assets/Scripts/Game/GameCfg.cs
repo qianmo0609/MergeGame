@@ -97,5 +97,7 @@ public enum GameObjEunm
     loopListItem,
     scoreListItem,
     bombEffct,
-    bottomWall
+    bottomWall,
+    uiRoot,
+    bg
 }

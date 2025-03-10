@@ -95,7 +95,8 @@ public class GemsItem : MonoBehaviour
         this.transform.position = new Vector3(10000, 10000, 0);
         this.idx = Vector2Int.down;
         this.transform.DOKill();
-        PoolManager.Instance.gemsPool.putObjToPool(this);
+        //PoolManager.Instance.gemsPool.putObjToPool(this);
+        ResManager.Instance.PutObjToPool<GemsItem>(GameObjEunm.gemItem,this);
         this.isFull = false;
         this.gameObject.SetActive(true);
     }

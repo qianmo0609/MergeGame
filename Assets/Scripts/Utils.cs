@@ -66,4 +66,12 @@ public class Utils
         }
         return 0;
     }
+
+    // 四方向向量：上、下、左、右
+    public static Vector2Int[] directions = {
+        new Vector2Int(-1,0), //上
+        new Vector2Int(1,0), //下
+        new Vector2Int(0,-1), //左 
+        new Vector2Int(0,1) //右
+    };
 }

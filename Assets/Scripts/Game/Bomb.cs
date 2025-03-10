@@ -3,7 +3,7 @@ using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// Éú³ÉµÄÕ¨µ¯×°ÖÃ
+/// ï¿½ï¿½ï¿½Éµï¿½Õ¨ï¿½ï¿½×°ï¿½ï¿½
 /// </summary>
 public class Bomb : EffectFlyItem
 {
@@ -29,7 +29,7 @@ public class Bomb : EffectFlyItem
 
     public void CallBack(MergeInfo mergeInfo)
     {
-        //Éú³É±¬Õ¨ÌØÐ§
+        //ï¿½ï¿½ï¿½É±ï¿½Õ¨ï¿½ï¿½Ð§
         EffectManager.Instance.CreateEffectbomb(-1,this.tarPos);
         cb(mergeInfo);
     }
@@ -37,6 +37,7 @@ public class Bomb : EffectFlyItem
     public override void RecycleSelf()
     {
         this.transform.position = new Vector3(10000, 10000, 0);
-        PoolManager.Instance.BombItemPool.putObjToPool(this);
+        //PoolManager.Instance.BombItemPool.putObjToPool(this);
+        ResManager.Instance.PutObjToPool<Bomb>(GameObjEunm.bomb,this);
     }
 }

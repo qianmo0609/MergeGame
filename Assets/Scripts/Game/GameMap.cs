@@ -26,22 +26,22 @@ public class GameMap
         leftWalls = new List<GameObject>(15);
         bottoWalls = new List<GameObject>(20);
         slots = new List<GameObject>(36);
-        CreateUIRoot(ResManager.Instance.uiRootPrefab);
-        CreateBG(ResManager.Instance.slotBGPrefab);
+        CreateUIRoot();
+        CreateBG();
         CreteSlotBG(grid);
         CreateWall(ResManager.Instance.wall);
         CreateButtomWall();
         currentWallNum = GameCfg.wallNum;
     }
 
-    void CreateUIRoot(UIRoot uiRootPrefab)
+    void CreateUIRoot()
     {
-        uiRoot = GameObject.Instantiate(uiRootPrefab);
+        uiRoot = ResManager.Instance.InstantiateMonoObj<UIRoot>(GameObjEunm.uiRoot);
     }
 
-    void CreateBG(GameObject slotBGPrefab)
+    void CreateBG()
     {
-        bg = GameObject.Instantiate(slotBGPrefab);
+        bg = ResManager.Instance.InstantiateObj<GameObject>(GameObjEunm.bg);
         this.levelSprite = bg.transform.Find("Level").GetComponent<SpriteRenderer>();
     }
 
@@ -53,7 +53,7 @@ public class GameMap
         {
             for (int j = 0; j < GameCfg.col; j++)
             {
-                slot = CreateFactory.Instance.CreateGameObj<GameObject>(GameObjEunm.slot);
+                slot = ResManager.Instance.CreateGameObj<GameObject>(GameObjEunm.slot);
                 slot.transform.SetParent(grid.transform);
                 slot.transform.position = startPos + new Vector3(.68f * i, -.64f * j, 0);
                 slots.Add(slot);
@@ -69,7 +69,7 @@ public class GameMap
         //从左到右依次生成底部的墙
         for (int i = 0; i < num; i++)
         {
-            GameObject bw = CreateFactory.Instance.CreateGameObj<GameObject>(GameObjEunm.bottomWall);
+            GameObject bw = ResManager.Instance.CreateGameObj<GameObject>(GameObjEunm.bottomWall);
             bottoWalls.Add(bw);
             bw.transform.SetParent(bg.transform, false);
             bw.transform.localPosition = pos;
@@ -183,14 +183,15 @@ public class GameMap
             g = bottoWalls[i];
             g.transform.parent = null;
             g.transform.position = new Vector3(1000,-1000,0);
-            PoolManager.Instance.BottomWall.putObjToPool(g);
+            //PoolManager.Instance.BottomWall.putObjToPool(g);
+            ResManager.Instance.PutObjToPool<GameObject>(GameObjEunm.bottomWall,g);
             bottoWalls.Remove(g);
         }
 
         //少了的块则再生成
         for (int i = maxNum; i < num; i++)
         {
-            g = CreateFactory.Instance.CreateGameObj<GameObject>(GameObjEunm.bottomWall);
+            g = ResManager.Instance.CreateGameObj<GameObject>(GameObjEunm.bottomWall);
             bottoWalls.Add(g);
             g.transform.SetParent(bg.transform, false);
             g.transform.localPosition = pos;
@@ -219,7 +220,7 @@ public class GameMap
                 }
                 else
                 {
-                    slot = CreateFactory.Instance.CreateGameObj<GameObject>(GameObjEunm.slot);
+                    slot = ResManager.Instance.CreateGameObj<GameObject>(GameObjEunm.slot);
                     slot.transform.SetParent(grid.transform);
                     slot.transform.position = startPos + new Vector3(.68f * i, -.64f * j, 0);
                     slots.Add(slot);
@@ -233,7 +234,8 @@ public class GameMap
             slot.transform.parent = null;
             slot.transform.position = new Vector3(10000, 10000, 0);
             slots.Remove(slot);
-            PoolManager.Instance.SlotPool.putObjToPool(slot);
+            //PoolManager.Instance.SlotPool.putObjToPool(slot);
+            ResManager.Instance.PutObjToPool<GameObject>(GameObjEunm.slot,slot);
         }
     }
 
