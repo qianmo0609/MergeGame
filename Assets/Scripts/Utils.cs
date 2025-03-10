@@ -78,8 +78,8 @@ public class Utils
     /// <summary>
     /// 转换XY到当前索引
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="x">行索引</param>
+    /// <param name="y">列索引</param>
     /// <returns></returns>
     public static int TransformXYTOIndex(int x, int y)
     {
